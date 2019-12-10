@@ -10,9 +10,11 @@ import Enums.SkillName;
 import Support.Roller;
 
 public class Entity{
-	public String name;
+	String name;
 	
 	Race race;
+	
+	Weapon weapon;
 
 	int level;
 	int currHP;
@@ -34,6 +36,16 @@ public class Entity{
 		defaultizeResistances();
 	}
 	
+	public Entity(Race race, String name, Integer level, Integer maxHP, Integer armorClass,
+			Integer STR, Integer DEX, Integer CON, Integer INT, Integer WIS, Integer CHR) {
+		this.race = race;
+		this.name = name;
+		this.level = level;
+		this.maxHP = maxHP; this.currHP = maxHP;
+		this.armorClass = armorClass;
+		this.setSkills(STR, DEX, CON, INT, WIS, CHR);
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -47,10 +59,22 @@ public class Entity{
 		this.CHR.setValue(CHR);		
 	}
 	
+	public void setWeapon(Weapon weapon) {
+		this.weapon = weapon;
+	}
+	
 	private void defaultizeResistances() {
 		for(DamageType dmg: DamageType.values()) {
 			resistanceMap.put(dmg, ImmunityType.NONE);
 		}
+	}
+	
+	public void setResistance(DamageType dt, ImmunityType it) {
+		this.resistanceMap.put(dt, it);
+	}
+	
+	public int getProficiency() {
+		return 2 + ((this.level-1)/4);
 	}
 	
 	public void applyRacialStats() {
@@ -110,6 +134,29 @@ public class Entity{
 			case IMMUNE:
 				break;
 		}
+	}
+	
+
+	public String toString() {
+		String output = new String();
+		output += "=\n";
+		output += this.name+"\n";
+		output += this.race+"\n";
+		output += this.level+"\n";
+		output += this.maxHP+"\n";
+		output += this.armorClass+"\n";
+		output += this.STR.value+"\n";
+		output += this.STR.value+"\n";
+		output += this.DEX.value+"\n";
+		output += this.CON.value+"\n";
+		output += this.INT.value+"\n";
+		output += this.WIS.value+"\n";
+		output += this.CHR.value+"\n";
+		for(DamageType dmg: DamageType.values()) {
+			output +="\n"+dmg+" "+resistanceMap.get(dmg);
+		}
+		output +="\n" + this.weapon.toString();
+		return output;
 	}
 }
 

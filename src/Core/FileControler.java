@@ -16,9 +16,11 @@ public class FileControler extends DNDWindow{
 	private File file;
 	private JFileChooser 
 			fileChooser = new JFileChooser(new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\"));
+	public boolean isFine = false;
 	
 	public FileControler() {
-		super(100, 100, false);
+		super(240, 0, false);
+		this.setTitle("DND FILE CONTROLER");
 
 		int choice = fileChooser.showOpenDialog(this);
 		if(choice == JFileChooser.APPROVE_OPTION)
@@ -28,8 +30,10 @@ public class FileControler extends DNDWindow{
 	}
 	
 	public ArrayList<Byte> fileToByteArray() {
-		if(this.file == null)
+		if(this.file == null) {
+			isFine = false;
 			return null;
+		}
 		else {
 			FileInputStream inStream;
 			try {
@@ -37,12 +41,14 @@ public class FileControler extends DNDWindow{
 				int content;
 				ArrayList<Byte> temp = new  ArrayList<Byte>();
 				while((content = inStream.read()) !=-1) {
-					temp.add((byte)content);
+					temp.add((byte)(content-44));
 				}
 				inStream.close();
+				isFine = true;
 				return temp;
 			} catch (Exception e) {
 				e.printStackTrace();
+				isFine = false;
 				return null;
 			}
 		}
@@ -55,11 +61,17 @@ public class FileControler extends DNDWindow{
 		FileOutputStream inStream;
 		try {
 			inStream = new FileOutputStream(this.file);
-			inStream.write(input);
+			int content;
+			for(int i=0; i<input.length;i++) {
+				content = (int)input[i];
+				inStream.write(content+44);
+			}
 			inStream.close();
+			isFine = true;
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			isFine = false;
 			return false;
 		}
 	}

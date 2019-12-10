@@ -6,14 +6,19 @@ import java.util.Map;
 
 import Enums.DamageType;
 import Enums.Die;
+import Enums.Enhancement;
 import Enums.WeaponType;
 import Support.DamagePackage;
+import Support.Roller;
 
 public class Weapon {
-	String name = new String();
-	ArrayList<DamagePackage> damage = new ArrayList<DamagePackage>();
-	DamageType dmType;
-	WeaponType wpType;
+	public ArrayList<DamagePackage> 
+				damage = new ArrayList<DamagePackage>(); //done
+	private String 		name = new String(); //done
+	private Boolean 	profficient;//done
+	private Enhancement enhancement;//done
+	private DamageType 	dmType;		//de-facto to ma zadawać dmg z STR lub DEX //done
+	private WeaponType 	wpType; 	//done
 	
 	public Weapon(String name) {
 		this.name = name;
@@ -38,18 +43,53 @@ public class Weapon {
 	}
 	
 	public void dealDmg(Entity user, Entity target) {
-		for(DamagePackage dmpc: damage) {
-			target.takeDamage(dmpc.resolve(), dmpc.dmgType);
-		}
-		switch(wpType) {
-			case NORMAL:
-				target.takeDamage(user.STR.modifier, dmType);
-			break;
+		int theRoll = Roller.roll(Die.D20) + (this.profficient ? user.getProficiency():0) + 
+		(this.wpType==WeaponType.NORMAL?user.STR.modifier:user.DEX.modifier) + this.enhancement.value;
+		if(theRoll>=target.armorClass) {
+			for(DamagePackage dmpc: damage) {target.takeDamage(dmpc.resolve(), dmpc.dmgType);}
+			switch(wpType) {
+				case NORMAL:
+					target.takeDamage(user.STR.modifier, dmType);
+					break;
 			
-			case FINESSE:
-				target.takeDamage(user.DEX.modifier, dmType);
-			break;
+				case FINESSE:
+					target.takeDamage(user.DEX.modifier, dmType);
+					break;
+			}
 		}
+	}
+	
+
+	public Boolean getProfficient() {
+		return profficient;
+	}
+
+	public Enhancement getEnhancement() {
+		return enhancement;
+	}
+
+	public DamageType getDmType() {
+		return dmType;
+	}
+
+	public WeaponType getWpType() {
+		return wpType;
+	}
+
+	public void setProfficient(Boolean profficient) {
+		this.profficient = profficient;
+	}
+
+	public void setEnhancement(Enhancement enhancement) {
+		this.enhancement = enhancement;
+	}
+
+	public void setDmType(DamageType dmType) {
+		this.dmType = dmType;
+	}
+
+	public void setWpType(WeaponType wpType) {
+		this.wpType = wpType;
 	}
 
 	public String toString() {
@@ -67,51 +107,24 @@ public class Weapon {
 				values.put(key, value+dmpk.dieNo);
 			}
 		}
-		String output = new String(this.name);
-		switch(this.dmType) {
-			case PIER:  output += " (piercing)"; 	break;
-			case SLAS:  output += " (slashing)"; 	break;
-			case BLUD:  output += " (bludgeoning)"; break;
-			case ACID:  output += " (acid)"; 		break;
-			case COLD:  output += " (cold)"; 		break;
-			case FIRE:  output += " (fire)"; 		break;
-			case FORC:  output += " (force)"; 		break;
-			case LIGH:  output += " (lightning)"; 	break;
-			case NECR:  output += " (necrotic)"; 	break;
-			case POIS:  output += " (poison)"; 		break;
-			case PSYC:  output += " (psychic)"; 	break;
-			case RADI:  output += " (radiant)"; 	break;
-			case THUN:  output += " (thunder)"; 	break;
-		}
+		String output = new String("<\n");
+
+		output += this.name;
+		output +="\n"+this.dmType.arrValue;
+		output +="\n"+this.profficient;
 		
 		switch(wpType) {
-		case FINESSE:
-			output += " finesse";
-			break;
-		default:
-			break;			
+			case FINESSE: output += "\nfinesse"; break;
+			default: 	  output += "\nnormal";  break;			
 		}
-		output += " weapon.";
 		
 		for(Map.Entry<Integer, Integer> entry: values.entrySet()) {
-			output += "\n "+entry.getValue()+"d"+(entry.getKey()%100)+" ";
-			switch(entry.getKey()/100) {
-				case  0: output+="piercing"; 	break;
-				case  1: output+="slashing"; 	break;
-            	case  2: output+="bludgeoning"; break;
-            	case  3: output+="acid"; 		break;
-            	case  4: output+="cold"; 		break;
-            	case  5: output+="fire"; 		break;
-            	case  6: output+="force"; 		break;
-            	case  7: output+="lightning"; 	break;
-            	case  8: output+="necrotic"; 	break;
-            	case  9: output+="poison"; 		break;
-            	case 10: output+="psychic"; 	break;
-            	case 11: output+="radiant"; 	break;
-            	case 12: output+="thunder"; 	break;
-			}
-			output+=" dmg.";
+			output +="\n>";
+			output +="\n"+entry.getValue()  /// ile kości
+			+"\n"+(entry.getKey()%100)		/// jakich kości
+			+"\n"+(entry.getKey()/100);		/// i jaki dmg reprezentuja
 		}
+		output +="\n<";
 		
 		return output;
 	}
