@@ -25,18 +25,18 @@ public class FileControler{
 				int content;
 				ArrayList<Byte> temp = new  ArrayList<Byte>();
 				while((content = inStream.read()) !=-1) {
-					temp.add((byte)(content-44));
+					temp.add((byte)(content/*-44*/));
 				}
 				inStream.close();
 				return temp;
 			} catch (Exception e) {
 				e.printStackTrace();
-				System.out.print("ERROR: "+e.getMessage());
+				Program.log("FileControler.fileToByteArray: "+e.getMessage());
 				return null;
 			}
 		}
 		else {
-			System.out.print("\nOI, YE FECKIN NULL CUNT");
+			Program.log("OI, YE FECKIN NULL CUNT");
 			return null;
 		}
 	}
@@ -56,13 +56,13 @@ public class FileControler{
 			int content;
 			for(int i=0; i<input.length;i++) {
 				content = (int)input[i];
-				inStream.write(content+44);
+				inStream.write(content/*+44*/);
 			}
 			inStream.close();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.print("ERROR: "+e.getMessage());
+			Program.log("FileControler.saveToFile: "+e.getMessage());
 			return false;
 		}
 	}

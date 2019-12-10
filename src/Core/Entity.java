@@ -156,7 +156,7 @@ public class Entity{
 		output += this.WIS.value+"\n";
 		output += this.CHR.value+"\n";
 		for(DamageType dmg: DamageType.values()) {
-			output +="\n "+dmg+" "+resistanceMap.get(dmg);
+			output +="\n"+resistanceMap.get(dmg);
 		}
 		output +="\n" + this.weapon.toString();
 		return output;
