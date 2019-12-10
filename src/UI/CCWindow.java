@@ -104,7 +104,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 				}
 			}
 			if(putout.getDmType()==null) {
-				putout.setDmType(putout.damage.get(0).dmgType);
+				if(putout.damage.size()>0)putout.setDmType(putout.damage.get(0).dmgType);
 			}
 			putout.setEnhancement(this.wepPanel.enhancBox.getItemAt(this.wepPanel.enhancBox.getSelectedIndex()));
 			putout.setProfficient(this.wepPanel.profBox.isSelected());

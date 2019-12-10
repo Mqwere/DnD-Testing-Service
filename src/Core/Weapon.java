@@ -20,6 +20,10 @@ public class Weapon {
 	private DamageType 	dmType;		//de-facto to ma zadawać dmg z STR lub DEX //done
 	private WeaponType 	wpType; 	//done
 	
+	public Weapon() {
+		
+	}
+	
 	public Weapon(String name) {
 		this.name = name;
 	}
@@ -124,7 +128,6 @@ public class Weapon {
 			+"\n"+(entry.getKey()%100)		/// jakich kości
 			+"\n"+(entry.getKey()/100);		/// i jaki dmg reprezentuja
 		}
-		output +="\n<";
 		
 		return output;
 	}

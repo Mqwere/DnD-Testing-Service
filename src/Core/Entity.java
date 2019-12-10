@@ -31,6 +31,10 @@ public class Entity{
 	EnumMap<DamageType,ImmunityType> resistanceMap = new 
 			EnumMap<DamageType,ImmunityType>(DamageType.class);
 	
+	public Entity() {
+		
+	}
+	
 	public Entity(Race race) {
 		this.race = race;
 		defaultizeResistances();
@@ -146,14 +150,13 @@ public class Entity{
 		output += this.maxHP+"\n";
 		output += this.armorClass+"\n";
 		output += this.STR.value+"\n";
-		output += this.STR.value+"\n";
 		output += this.DEX.value+"\n";
 		output += this.CON.value+"\n";
 		output += this.INT.value+"\n";
 		output += this.WIS.value+"\n";
 		output += this.CHR.value+"\n";
 		for(DamageType dmg: DamageType.values()) {
-			output +="\n"+dmg+" "+resistanceMap.get(dmg);
+			output +="\n "+dmg+" "+resistanceMap.get(dmg);
 		}
 		output +="\n" + this.weapon.toString();
 		return output;

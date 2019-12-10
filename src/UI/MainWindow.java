@@ -2,7 +2,6 @@ package UI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 
 import Core.Entity;
@@ -53,20 +52,12 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		}
 		else
 		if(source == saveButton) {
-			FileControler controler = new FileControler();
-			if(controler.isFine) {
-				byte[] input = Program.getSaveFile().getBytes();
-				controler.saveToFile(input);
-				controler.dispatchEvent(new WindowEvent(controler, WindowEvent.WINDOW_CLOSING));
-			} else controler.dispatchEvent(new WindowEvent(controler, WindowEvent.WINDOW_CLOSING));
+			byte[] input = Program.getSaveFile().getBytes();
+			FileControler.saveToFile(this,input);
 		}
 		else
 		if(source == loadButton){
-			FileControler controler = new FileControler();
-			if(controler.isFine) {
-				Program.setCurrentStatus(controler.fileToByteArray());
-				controler.dispatchEvent(new WindowEvent(controler, WindowEvent.WINDOW_CLOSING));
-			} else controler.dispatchEvent(new WindowEvent(controler, WindowEvent.WINDOW_CLOSING));
+			Program.setCurrentStatus(FileControler.fileToByteArray(this));
 		}
 		else
 		if(source == exitButton){
