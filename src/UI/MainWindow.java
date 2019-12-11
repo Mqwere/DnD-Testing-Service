@@ -7,18 +7,27 @@ import javax.swing.JButton;
 import Core.Entity;
 import Core.FileControler;
 import Core.Program;
+import Enums.WindowState;
 
 public class MainWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
+	
+	WindowState state;
 		
-	/// UI
+	/// INIT UI
 	JButton newButton 	= new JButton("New Character");
 	JButton saveButton	= new JButton("Save Simulation");
 	JButton loadButton 	= new JButton("Load Simulation");
 	JButton exitButton	= new JButton("Exit");
 	
+	/// ENCSET UI
+	
+	
+	/// ENCINIT UI
+	
 	public MainWindow() {
 		super(240, 640, true);
+		this.state = WindowState.INIT;
 		this.setTitle("DnD Testing Service");
 
 		newButton	.addActionListener(this);
@@ -41,7 +50,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	}
 	
 	public void saveCCFile(Entity entity) {
-		Program.save += entity.toString();
+		Program.save += entity.toString() + "\n";
 	}
 
 	@Override

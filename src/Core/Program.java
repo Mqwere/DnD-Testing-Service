@@ -77,22 +77,27 @@ public class Program {
 					case  1:
 						try {
 						for (Race r: Race.values()) {
-							if(r.toString() == line) {
+							//Program.log("Line:'"+line+"' Race:'"+r.toString()+"'");
+							if(r.toString().equals(line)) {
 								tempE.race = r;
 							}
 						}	
+						if(tempE.race == null) {
+							Program.log("STELL ERROR: Race null, line: "+line+"\n");
+							tempE.race = Race.CUSTOM;
+						}
 						} catch(Exception e) {
 							Program.log("Program.saveToEntityList.CCOPEN: "+e.getMessage());
 						}break;
-					case  2:	tempE.level 	 = Integer.parseInt(line); 	break;
-					case  3:	tempE.maxHP 	 = Integer.parseInt(line); 	break;
-					case  4:	tempE.armorClass = Integer.parseInt(line); 	break;
-					case  5:	tempE.STR.setValue(Integer.parseInt(line)); break;
-					case  6:	tempE.DEX.setValue(Integer.parseInt(line)); break;
-					case  7:	tempE.CON.setValue(Integer.parseInt(line)); break;
-					case  8:	tempE.INT.setValue(Integer.parseInt(line)); break;
-					case  9:	tempE.WIS.setValue(Integer.parseInt(line)); break;
-					case 10:	tempE.CHR.setValue(Integer.parseInt(line)); break;
+					case  2:	tempE.level 	 = Integer.parseInt(line);	break;
+					case  3:	tempE.maxHP 	 = Integer.parseInt(line);  break;
+					case  4:	tempE.armorClass = Integer.parseInt(line);  break;
+					case  5:	tempE.STR.setValue(Integer.parseInt(line)); if(tempE.STR.value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
+					case  6:	tempE.DEX.setValue(Integer.parseInt(line)); if(tempE.DEX.value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
+					case  7:	tempE.CON.setValue(Integer.parseInt(line)); if(tempE.CON.value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
+					case  8:	tempE.INT.setValue(Integer.parseInt(line)); if(tempE.INT.value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
+					case  9:	tempE.WIS.setValue(Integer.parseInt(line)); if(tempE.WIS.value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
+					case 10:	tempE.CHR.setValue(Integer.parseInt(line)); if(tempE.CHR.value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
 					case 11: 
 						if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
 						else if(line=="NONE")  it = ImmunityType.NONE;

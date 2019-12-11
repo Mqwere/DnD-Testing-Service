@@ -1,7 +1,6 @@
 package Enums;
 
 public enum Race {
-
 	BUGBEAR   ,
 	CUSTOM    ,
 	DWARF     ,

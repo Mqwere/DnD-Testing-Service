@@ -74,6 +74,9 @@ public class Entity{
 	}
 	
 	public void setResistance(DamageType dt, ImmunityType it) {
+		if(dt == null) Program.log("SET RESISTANCE ERROR: DT NULL");
+		if(it == null) Program.log("SET RESISTANCE ERROR: IT NULL");
+		
 		this.resistanceMap.put(dt, it);
 	}
 	
@@ -145,7 +148,7 @@ public class Entity{
 		String output = new String();
 		output += "=\n";
 		output += this.name+"\n";
-		output += this.race+"\n";
+		output += this.race.toString()+"\n";
 		output += this.level+"\n";
 		output += this.maxHP+"\n";
 		output += this.armorClass+"\n";
