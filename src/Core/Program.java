@@ -15,8 +15,23 @@ public class Program {
 	
 	public static ArrayList<Entity> entityList = new ArrayList<Entity>();
 	
-	public static void log(String message) {
-		System.out.print("\n "+message);
+	public static void print(Object message) {
+		if(message.getClass() == String.class) {
+			String obj = (String)message;
+			System.out.print(obj);
+		}
+		else
+		if(message.getClass() == Boolean.class) {
+			Boolean obj = (Boolean) message;
+			System.out.print(Boolean.toString(obj));
+		}
+		else {
+			System.out.print(message.toString());
+		}
+	}
+
+	public static void log(Object message) {
+		Program.print("\n "+message);
 	}
 	
 	public static String save = new String();
@@ -32,6 +47,7 @@ public class Program {
 		DamageType tempDT = null;
 		
 		for(String line: input) {
+			if(line.length()>0) {
 			if(line.charAt(0) == SaveState.CCOPEN.startSign) {
 				if(tempE!=null) {
 					tempE.setWeapon(tempW);
@@ -57,12 +73,11 @@ public class Program {
 				switch(currSS) {
 				case CCOPEN:
 					switch(incrementer++) {
-					case  0:	tempE.name 		= line;						break;
+					case  0:	tempE.name 		= line;		break;
 					case  1:
 						try {
 						for (Race r: Race.values()) {
-							Program.log(r.name.toUpperCase()+" vs. "+line);
-							if(r.name.toUpperCase() == line) {
+							if(r.toString() == line) {
 								tempE.race = r;
 							}
 						}	
@@ -216,6 +231,7 @@ public class Program {
 					break;
 				}
 			}
+		}
 		}
 	}
 	

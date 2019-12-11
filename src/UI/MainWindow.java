@@ -60,7 +60,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 			Program.setCurrentStatus(FileControler.fileToByteArray(this));
 			try{Program.saveToEntityList();} catch(Exception e) {Program.log("MainWindow.actionPerformed.loadButton: "+e.getMessage());}
 			for(Entity e: Program.entityList) {
-				Program.log(Boolean.toString(e.equals(null)));				
+				Program.print(e.toString());
 			}
 		}
 		else
