@@ -57,6 +57,9 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		
 		setContent();
 	}
+	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint, Entity ent) {
+		this(parent,ccolor,cint);
+	}
 	
 	private void setContent() {
 		statPanel.setBounds( 20, 20,300,440);
