@@ -7,13 +7,14 @@ import Enums.Die;
 import Enums.ImmunityType;
 import Enums.Race;
 import Enums.SaveState;
+import Enums.TeamColor;
 import Enums.WeaponType;
-import UI.CCWindow;
+import Support.EntityRegister;
 import UI.MainWindow;
 
 public class Program {
 	
-	public static ArrayList<Entity> entityList = new ArrayList<Entity>();
+	public static MainWindow mainWindow;
 	
 	public static void print(Object message) {
 		if(message.getClass() == String.class) {
@@ -51,7 +52,7 @@ public class Program {
 			if(line.charAt(0) == SaveState.CCOPEN.startSign) {
 				if(tempE!=null) {
 					tempE.setWeapon(tempW);
-					Program.entityList.add(tempE);
+					EntityRegister.put(tempE.color,tempE);
 				}
 				currSS = SaveState.CCOPEN;
 				tempE = new Entity();
@@ -189,6 +190,10 @@ public class Program {
 						else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
 						else  it = ImmunityType.NONE;
 						tempE.setResistance(DamageType.THUN,it);	break;
+					case 24:
+						if(line=="RED") tempE.color = TeamColor.RED;
+						else 			tempE.color = TeamColor.BLUE;
+						break;
 					}
 					break;
 				case DMGOPEN:
@@ -245,15 +250,6 @@ public class Program {
 		return save;
 	}
 	
-	public static int addEntity(Entity ent) {
-		Program.entityList.add(ent);
-		return Program.entityList.size()-1;
-	}
-	
-	public static Entity getEntity(int index) {
-		return Program.entityList.get(index);
-	}
-	
 	public static void setCurrentStatus(ArrayList<Byte> array) {
 		String boop = new String();
 		for(Byte b: array) {
@@ -263,7 +259,7 @@ public class Program {
 	}
 
 	public static void main(String[] args) {
-		new MainWindow();
+		Program.mainWindow = new MainWindow();
 		//new CCWindow();
 	}
 

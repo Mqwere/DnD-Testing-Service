@@ -7,12 +7,15 @@ import Enums.Die;
 import Enums.ImmunityType;
 import Enums.Race;
 import Enums.SkillName;
+import Enums.TeamColor;
 import Support.Roller;
 
 public class Entity{
 	String name;
 	
 	Race race;
+	
+	public TeamColor color;
 	
 	Weapon weapon;
 
@@ -52,6 +55,18 @@ public class Entity{
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public Race getRace() {
+		return this.race;
+	}
+	
+	public Integer getLvL() {
+		return this.level;
 	}
 	
 	public void setSkills(int STR, int DEX, int CON, int INT, int WIS, int CHR) {
@@ -161,6 +176,7 @@ public class Entity{
 		for(DamageType dmg: DamageType.values()) {
 			output +="\n"+resistanceMap.get(dmg);
 		}
+		output +="\n" + this.color;
 		output +="\n" + this.weapon.toString();
 		return output;
 	}

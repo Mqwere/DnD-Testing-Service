@@ -21,22 +21,29 @@ import Enums.Die;
 import Enums.Enhancement;
 import Enums.ImmunityType;
 import Enums.Race;
+import Enums.TeamColor;
 import Enums.WeaponType;
+import Support.EntityRegister;
 
 public class CCWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
-	MainWindow parent;
-	StatPanel statPanel = new StatPanel	 ( );
-	ResPanel  resPanel  = new ResPanel	 ( );
-	WeaponPanel wepPanel= new WeaponPanel("Main weapon");
-	JButton	affirm		= new JButton	 ("Save");
-	JButton	cancel		= new JButton	 ("Cancel");
+	MainWindow 	parent;
+	StatPanel 	statPanel= new StatPanel  ( );
+	ResPanel  	resPanel = new ResPanel	  ( );
+	WeaponPanel wepPanel = new WeaponPanel("Main weapon");
+	JButton		affirm	 = new JButton	  ("Save");
+	JButton		cancel	 = new JButton	  ("Cancel");
 	
-	public CCWindow(MainWindow parent) {
+	TeamColor	ccolor;
+	Integer		cint;
+	
+	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint) {
 		super(995, 540, false);
 		this.setTitle("DnD Character Creation");
 		this.parent = parent;
+		this.ccolor = ccolor;
+		this.cint	= cint;
 		panel  .setBackground(new Color(50, 93, 110));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
@@ -110,7 +117,13 @@ public class CCWindow extends DNDWindow implements ActionListener{
 			putout.setProfficient(this.wepPanel.profBox.isSelected());
 			output.setWeapon(putout);
 			
-			parent.saveCCFile(output);
+			if(this.ccolor == TeamColor.BLUE) {
+				this.parent.blue_team	.updateTheLook(new CharacterRecord(output.getName(), output.getRace(), output.getLvL()));
+			}
+			else {
+				this.parent.red_team	.updateTheLook(new CharacterRecord(output.getName(), output.getRace(), output.getLvL()));
+			}
+			EntityRegister.put(this.ccolor, output);
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 		else
@@ -366,6 +379,4 @@ class WeaponPanel extends JPanel implements ActionListener{
 			}
 		}
 	}
-	}
-
-
+}
