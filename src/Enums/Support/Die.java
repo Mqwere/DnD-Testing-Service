@@ -1,4 +1,4 @@
-package Enums;
+package Enums.Support;
 
 public enum Die {
 	D4 ( 4),

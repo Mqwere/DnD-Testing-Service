@@ -1,4 +1,4 @@
-package Enums;
+package Enums.Support;
 
 
 public enum SkillName {

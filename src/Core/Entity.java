@@ -2,14 +2,19 @@ package Core;
 
 import java.util.EnumMap;
 
-import Enums.DamageType;
-import Enums.ImmunityType;
-import Enums.Race;
-import Enums.SkillName;
-import Enums.TeamColor;
+import Enums.Core.ImmunityType;
+import Enums.Core.Race;
+import Enums.Core.TeamColor;
+import Enums.Support.DamageType;
+import Enums.Support.SkillName;
 import Support.Skill;
 
 public class Entity{
+	/////// Fields that will only be used in a running simulation
+	
+	///////
+	
+	/////// Fields that the program needs to save / load
 	String name;
 	
 	Race race;
@@ -32,6 +37,7 @@ public class Entity{
 	
 	EnumMap<DamageType,ImmunityType> 
 	resistanceMap = new EnumMap<>(DamageType.class);
+	//////
 	
 	public Entity() {
 		

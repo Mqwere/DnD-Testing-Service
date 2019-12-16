@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import Enums.DamageType;
-import Enums.Die;
-import Enums.Enhancement;
-import Enums.WeaponType;
+import Enums.Core.Enhancement;
+import Enums.Core.WeaponType;
+import Enums.Support.DamageType;
+import Enums.Support.Die;
 import Support.DamagePackage;
 import Support.Roller;
 

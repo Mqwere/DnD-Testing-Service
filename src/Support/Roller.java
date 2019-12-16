@@ -2,7 +2,7 @@ package Support;
 
 import java.util.Random;
 
-import Enums.Die;
+import Enums.Support.Die;
 
 public class Roller{
 	private static Random ladyLuck = new Random();

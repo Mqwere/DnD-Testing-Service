@@ -3,13 +3,13 @@ package Core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Enums.DamageType;
-import Enums.Die;
-import Enums.ImmunityType;
-import Enums.Race;
-import Enums.SaveState;
-import Enums.TeamColor;
-import Enums.WeaponType;
+import Enums.Core.ImmunityType;
+import Enums.Core.Race;
+import Enums.Core.SaveState;
+import Enums.Core.TeamColor;
+import Enums.Core.WeaponType;
+import Enums.Support.DamageType;
+import Enums.Support.Die;
 import Support.EntityRegister;
 import UI.MainWindow;
 

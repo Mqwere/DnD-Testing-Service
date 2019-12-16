@@ -1,4 +1,4 @@
-package Enums;
+package Enums.Core;
 
 public enum Enhancement {
 	plus0(0),

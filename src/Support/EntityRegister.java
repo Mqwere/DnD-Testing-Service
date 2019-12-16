@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import Core.Entity;
-import Enums.TeamColor;
+import Enums.Core.TeamColor;
 
 public class EntityRegister{
 	

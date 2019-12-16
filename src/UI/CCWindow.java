@@ -16,13 +16,13 @@ import javax.swing.JTextField;
 
 import Core.Entity;
 import Core.Weapon;
-import Enums.DamageType;
-import Enums.Die;
-import Enums.Enhancement;
-import Enums.ImmunityType;
-import Enums.Race;
-import Enums.TeamColor;
-import Enums.WeaponType;
+import Enums.Core.Enhancement;
+import Enums.Core.ImmunityType;
+import Enums.Core.Race;
+import Enums.Core.TeamColor;
+import Enums.Core.WeaponType;
+import Enums.Support.DamageType;
+import Enums.Support.Die;
 import Support.DamagePackage;
 import Support.EntityRegister;
 

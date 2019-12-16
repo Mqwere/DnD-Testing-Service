@@ -1,7 +1,7 @@
 package Support;
 
-import Enums.DamageType;
-import Enums.Die;
+import Enums.Support.DamageType;
+import Enums.Support.Die;
 
 public class DamagePackage {
 	public int 			dieNo;

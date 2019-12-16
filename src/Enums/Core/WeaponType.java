@@ -1,4 +1,4 @@
-package Enums;
+package Enums.Core;
 
 public enum WeaponType {
 	NORMAL,

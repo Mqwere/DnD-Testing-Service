@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import Core.Entity;
 import Core.FileControler;
 import Core.Program;
-import Enums.Race;
-import Enums.TeamColor;
-import Enums.WindowState;
+import Enums.Core.Race;
+import Enums.Core.TeamColor;
+import Enums.UI.WindowState;
 import Support.EntityRegister;
 
 public class MainWindow extends DNDWindow implements ActionListener{

@@ -1,7 +1,7 @@
 package Support;
 
-import Enums.Die;
-import Enums.SkillName;
+import Enums.Support.Die;
+import Enums.Support.SkillName;
 
 public class Skill{
 	public int value;

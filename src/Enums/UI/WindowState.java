@@ -1,4 +1,4 @@
-package Enums;
+package Enums.UI;
 
 public enum WindowState {
 	INIT,
