@@ -3,12 +3,11 @@ package Core;
 import java.util.EnumMap;
 
 import Enums.DamageType;
-import Enums.Die;
 import Enums.ImmunityType;
 import Enums.Race;
 import Enums.SkillName;
 import Enums.TeamColor;
-import Support.Roller;
+import Support.Skill;
 
 public class Entity{
 	String name;
@@ -24,15 +23,15 @@ public class Entity{
 	int maxHP;
 	int armorClass;
 	
-	Skill STR = new Skill(SkillName.STR);
-	Skill DEX = new Skill(SkillName.DEX);
-	Skill CON = new Skill(SkillName.CON);
-	Skill INT = new Skill(SkillName.INT);
-	Skill WIS = new Skill(SkillName.WIS);
-	Skill CHR = new Skill(SkillName.CHR);
+	public Skill STR = new Skill(SkillName.STR);
+	public Skill DEX = new Skill(SkillName.DEX);
+	public Skill CON = new Skill(SkillName.CON);
+	public Skill INT = new Skill(SkillName.INT);
+	public Skill WIS = new Skill(SkillName.WIS);
+	public Skill CHR = new Skill(SkillName.CHR);
 	
-	EnumMap<DamageType,ImmunityType> resistanceMap = new 
-			EnumMap<DamageType,ImmunityType>(DamageType.class);
+	EnumMap<DamageType,ImmunityType> 
+	resistanceMap = new EnumMap<>(DamageType.class);
 	
 	public Entity() {
 		
@@ -69,6 +68,10 @@ public class Entity{
 		return this.level;
 	}
 	
+	public Integer getHP() {
+		return this.maxHP;
+	}
+	
 	public void setSkills(int STR, int DEX, int CON, int INT, int WIS, int CHR) {
 		this.STR.setValue(STR);
 		this.DEX.setValue(DEX);
@@ -80,6 +83,10 @@ public class Entity{
 	
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
+	}
+	
+	public Weapon getWeapon() {
+		return this.weapon;
 	}
 	
 	private void defaultizeResistances() {
@@ -99,45 +106,10 @@ public class Entity{
 		return 2 + ((this.level-1)/4);
 	}
 	
-	public void applyRacialStats() {
-		switch(this.race) {
-		case CUSTOM:
-			break;
-		case DWARF:
-			resistanceMap.put(DamageType.POIS, ImmunityType.RESISTANT);
-			break;
-		case ELF:
-			break;
-		case GNOME:
-			break;
-		case HALFLING:
-			break;
-		case HALF_ELF:
-			break;
-		case HALF_ORC:
-			break;
-		case HUMAN:
-			break;
-		case KOBOLD:
-			break;
-		case ORC:
-			break;
-		case TIEFLING:
-			resistanceMap.put(DamageType.FIRE, ImmunityType.RESISTANT);
-			break;
-		case BUGBEAR:
-			break;
-		case DRAGONBORN:
-			break;
-		case GOBLIN:
-			break;
-		case WARFORGED:
-			resistanceMap.put(DamageType.POIS, ImmunityType.RESISTANT);
-			break;
-		default:
-			break;
-		}
+	public ImmunityType getResistance(DamageType dt) {
+		return this.resistanceMap.get(dt);
 	}
+
 	
 	public void takeDamage(int value, DamageType type) {
 		switch(resistanceMap.get(type)) {
@@ -172,72 +144,12 @@ public class Entity{
 		output += this.CON.value+"\n";
 		output += this.INT.value+"\n";
 		output += this.WIS.value+"\n";
-		output += this.CHR.value+"\n";
+		output += this.CHR.value;
 		for(DamageType dmg: DamageType.values()) {
 			output +="\n"+resistanceMap.get(dmg);
 		}
 		output +="\n" + this.color;
 		output +="\n" + this.weapon.toString();
 		return output;
-	}
-}
-
-class Skill{
-	public int value;
-	public int modifier;
-	SkillName  name;
-	
-	public Skill(SkillName name){
-		this.name = name;
-	}
-	
-	public Skill(SkillName name, int value){
-		this(name);
-		this.value = value;
-		this.modifier = value/2 - 5;
-	}
-		
-	public void setValue(int input) {
-		this.value = input;
-		this.modifier = input/2 - 5;
-	}
-	
-	public boolean check(int DC) {
-		int roll = Roller.roll(Die.D20);
-		if(roll == 1) 
-			return false;
-		else 
-		if(roll == 20) 
-			return true;
-		else {
-			int result =  roll	+ this.modifier;
-			return !(result<DC);
-		}
-	}
-	
-	public boolean checkAdv(int DC) {
-		int roll = Roller.rollAdv(Die.D20);
-		if(roll == 1) 
-			return false;
-		else 
-		if(roll == 20) 
-			return true;
-		else {
-			int result = roll + this.modifier;
-			return !(result<DC);
-		}
-	}
-	
-	public boolean checkDis(int DC) {
-		int roll = Roller.rollDis(Die.D20);
-		if(roll == 1) 
-			return false;
-		else 
-		if(roll == 20) 
-			return true;
-		else {
-			int result = roll + this.modifier;
-			return !(result<DC);
-		}
 	}
 }

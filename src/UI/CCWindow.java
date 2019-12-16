@@ -23,17 +23,20 @@ import Enums.ImmunityType;
 import Enums.Race;
 import Enums.TeamColor;
 import Enums.WeaponType;
+import Support.DamagePackage;
 import Support.EntityRegister;
 
 public class CCWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
 	MainWindow 	parent;
-	StatPanel 	statPanel= new StatPanel  ( );
+	StatPanel 	statPanel= new StatPanel  (this);
 	ResPanel  	resPanel = new ResPanel	  ( );
 	WeaponPanel wepPanel = new WeaponPanel("Main weapon");
 	JButton		affirm	 = new JButton	  ("Save");
 	JButton		cancel	 = new JButton	  ("Cancel");
+	
+	Boolean		edit 	 = false;
 	
 	TeamColor	ccolor;
 	Integer		cint;
@@ -57,8 +60,45 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		
 		setContent();
 	}
+	
 	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint, Entity ent) {
 		this(parent,ccolor,cint);
+		this.edit = true;
+		/// ===================
+		this.statPanel.acField	.setText(Integer.toString(ent.getLvL()));
+		this.statPanel.nameField.setText(ent.getName());
+		this.statPanel.hpField	.setText(Integer.toString(ent.getHP()));
+		this.statPanel.lvlChoice.setSelectedItem(ent.getLvL());
+		this.statPanel.raceBox	.setSelectedItem(ent.getRace());
+		this.statPanel.STRBox	.setSelectedItem(ent.STR.value);
+		this.statPanel.DEXBox	.setSelectedItem(ent.DEX.value);
+		this.statPanel.CONBox	.setSelectedItem(ent.CON.value);
+		this.statPanel.INTBox	.setSelectedItem(ent.INT.value);
+		this.statPanel.WISBox	.setSelectedItem(ent.WIS.value);
+		this.statPanel.CHRBox	.setSelectedItem(ent.CHR.value);
+		/// ===================
+		this.resPanel.PIERbox.setSelectedItem(ent.getResistance(DamageType.PIER));
+		this.resPanel.SLASbox.setSelectedItem(ent.getResistance(DamageType.SLAS));
+		this.resPanel.BLUDbox.setSelectedItem(ent.getResistance(DamageType.BLUD));
+		this.resPanel.ACIDbox.setSelectedItem(ent.getResistance(DamageType.ACID));
+		this.resPanel.COLDbox.setSelectedItem(ent.getResistance(DamageType.COLD));
+		this.resPanel.FIREbox.setSelectedItem(ent.getResistance(DamageType.FIRE));
+		this.resPanel.FORCbox.setSelectedItem(ent.getResistance(DamageType.FORC));
+		this.resPanel.LIGHbox.setSelectedItem(ent.getResistance(DamageType.LIGH));
+		this.resPanel.NECRbox.setSelectedItem(ent.getResistance(DamageType.NECR));
+		this.resPanel.POISbox.setSelectedItem(ent.getResistance(DamageType.POIS));
+		this.resPanel.PSYCbox.setSelectedItem(ent.getResistance(DamageType.PSYC));
+		this.resPanel.RADIbox.setSelectedItem(ent.getResistance(DamageType.RADI));
+		this.resPanel.THUNbox.setSelectedItem(ent.getResistance(DamageType.THUN));
+		/// ===================
+		Weapon tmp = ent.getWeapon();
+		this.wepPanel.nameField	.setText		(tmp.getName());
+		this.wepPanel.profBox	.setSelected	(tmp.getProfficient());
+		this.wepPanel.enhancBox	.setSelectedItem(tmp.getEnhancement());
+		this.wepPanel.wtBox		.setSelectedItem(tmp.getWpType());
+		for(DamagePackage dp: tmp.damage) {
+			this.wepPanel.updateTheLook(new WeaponRecord(dp.dmgType,dp.dieNo,dp.dieSize));
+		}
 	}
 	
 	private void setContent() {
@@ -74,18 +114,18 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		Object source = event.getSource();
 		if(affirm == source) {
 			Entity output = new Entity(
-					(Race)this.statPanel.raceBox.getSelectedItem(),
-					this.statPanel.nameField.getText(),
-					this.statPanel.lvlChoice.getItemAt(this.statPanel.lvlChoice.getSelectedIndex()),
-					Integer.parseInt(this.statPanel.hpField.getText()),
-					Integer.parseInt(this.statPanel.acField.getText()),
-					this.statPanel.STRBox.getItemAt(this.statPanel.STRBox.getSelectedIndex()),
-					this.statPanel.DEXBox.getItemAt(this.statPanel.DEXBox.getSelectedIndex()),
-					this.statPanel.CONBox.getItemAt(this.statPanel.CONBox.getSelectedIndex()),
-					this.statPanel.WISBox.getItemAt(this.statPanel.WISBox.getSelectedIndex()),
-					this.statPanel.INTBox.getItemAt(this.statPanel.INTBox.getSelectedIndex()),
-					this.statPanel.CHRBox.getItemAt(this.statPanel.CHRBox.getSelectedIndex())
-					);
+				(Race)this.statPanel.raceBox.getSelectedItem(),
+				this.statPanel.nameField.getText(),
+				this.statPanel.lvlChoice.getItemAt(this.statPanel.lvlChoice.getSelectedIndex()),
+				Integer.parseInt(this.statPanel.hpField.getText()),
+				Integer.parseInt(this.statPanel.acField.getText()),
+				this.statPanel.STRBox.getItemAt(this.statPanel.STRBox.getSelectedIndex()),
+				this.statPanel.DEXBox.getItemAt(this.statPanel.DEXBox.getSelectedIndex()),
+				this.statPanel.CONBox.getItemAt(this.statPanel.CONBox.getSelectedIndex()),
+				this.statPanel.WISBox.getItemAt(this.statPanel.WISBox.getSelectedIndex()),
+				this.statPanel.INTBox.getItemAt(this.statPanel.INTBox.getSelectedIndex()),
+				this.statPanel.CHRBox.getItemAt(this.statPanel.CHRBox.getSelectedIndex())
+			);
 			output.setResistance(DamageType.PIER,this.resPanel.PIERbox.getItemAt(this.resPanel.PIERbox.getSelectedIndex()));
 			output.setResistance(DamageType.SLAS,this.resPanel.SLASbox.getItemAt(this.resPanel.SLASbox.getSelectedIndex()));
 			output.setResistance(DamageType.BLUD,this.resPanel.BLUDbox.getItemAt(this.resPanel.BLUDbox.getSelectedIndex()));
@@ -99,6 +139,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 			output.setResistance(DamageType.PSYC,this.resPanel.PSYCbox.getItemAt(this.resPanel.PSYCbox.getSelectedIndex()));
 			output.setResistance(DamageType.RADI,this.resPanel.RADIbox.getItemAt(this.resPanel.RADIbox.getSelectedIndex()));
 			output.setResistance(DamageType.THUN,this.resPanel.THUNbox.getItemAt(this.resPanel.THUNbox.getSelectedIndex()));
+			output.color = this.ccolor;
 			
 			Weapon putout = new Weapon(this.wepPanel.nameField.getText(),this.wepPanel.wtBox.getItemAt(this.wepPanel.wtBox.getSelectedIndex()));
 			DamageType temp;
@@ -113,20 +154,27 @@ public class CCWindow extends DNDWindow implements ActionListener{
 					}
 				}
 			}
-			if(putout.getDmType()==null) {
-				if(putout.damage.size()>0)putout.setDmType(putout.damage.get(0).dmgType);
-			}
+			if(putout.getDmType()==null && putout.damage.size()>0) putout.setDmType(putout.damage.get(0).dmgType);
+			
 			putout.setEnhancement(this.wepPanel.enhancBox.getItemAt(this.wepPanel.enhancBox.getSelectedIndex()));
 			putout.setProfficient(this.wepPanel.profBox.isSelected());
 			output.setWeapon(putout);
 			
-			if(this.ccolor == TeamColor.BLUE) {
-				this.parent.blue_team	.updateTheLook(new CharacterRecord(output.getName(), output.getRace(), output.getLvL()));
+			if(!this.edit)	{
+				if(this.ccolor == TeamColor.BLUE) 
+					 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
+				else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
+				
+				EntityRegister.put(this.ccolor, output);
 			}
 			else {
-				this.parent.red_team	.updateTheLook(new CharacterRecord(output.getName(), output.getRace(), output.getLvL()));
-			}
-			EntityRegister.put(this.ccolor, output);
+				if(this.ccolor == TeamColor.BLUE) 
+					 this.parent.blue_team	.updateTheLook(cint,output);
+				else this.parent.red_team	.updateTheLook(cint,output);
+				
+				EntityRegister.put(this.ccolor, cint, output);
+			}	
+			
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 		else
@@ -137,8 +185,10 @@ public class CCWindow extends DNDWindow implements ActionListener{
 
 }
 
-class StatPanel extends JPanel{
+class StatPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
+	
+	CCWindow master;
 	
 	JLabel titleLabel	= new JLabel("Character Statistics");
 	
@@ -167,12 +217,13 @@ class StatPanel extends JPanel{
 	JComboBox<Integer> STRBox 	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Integer> DEXBox 	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Integer> CONBox 	= new JComboBox<Integer>(lvlPoss);
-	JComboBox<Integer> INTBox 	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Integer> WISBox 	= new JComboBox<Integer>(lvlPoss);
+	JComboBox<Integer> INTBox 	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Integer> CHRBox 	= new JComboBox<Integer>(lvlPoss);
 	
-	public StatPanel() {
+	public StatPanel(CCWindow master) {
 		this  .setBackground(new Color(65,110, 120));
+		this  .master = master;
 		
 		raceBox.setSelectedItem(Race.CUSTOM);
 		STRBox .setSelectedItem(10);
@@ -185,7 +236,7 @@ class StatPanel extends JPanel{
 	    this.add(titleLabel);
 		this.add(nameLabel); this.add(nameField);
 		this.add(lvlLabel ); this.add(lvlChoice);
-		this.add(raceLabel); this.add(raceBox  );
+		this.add(raceLabel); this.add(raceBox  ); this.raceBox.addActionListener(this);
 		this.add(hpLabel  ); this.add(hpField  );
 		this.add(acLabel  ); this.add(acField  );
 		this.add(STRLabel ); this.add(STRBox   );
@@ -211,9 +262,69 @@ class StatPanel extends JPanel{
 		STRLabel .setBounds(dim.x+ 20,dim.y+210,100, 25);	STRBox 	 .setBounds(dim.x+120,dim.y+210,100, 25);
 		DEXLabel .setBounds(dim.x+ 20,dim.y+246,100, 25);	DEXBox 	 .setBounds(dim.x+120,dim.y+246,100, 25);
 		CONLabel .setBounds(dim.x+ 20,dim.y+282,100, 25);	CONBox 	 .setBounds(dim.x+120,dim.y+282,100, 25);
-		INTLabel .setBounds(dim.x+ 20,dim.y+318,100, 25);	INTBox 	 .setBounds(dim.x+120,dim.y+318,100, 25);
-		WISLabel .setBounds(dim.x+ 20,dim.y+354,100, 25);	WISBox 	 .setBounds(dim.x+120,dim.y+354,100, 25);
+		WISLabel .setBounds(dim.x+ 20,dim.y+318,100, 25);	INTBox 	 .setBounds(dim.x+120,dim.y+318,100, 25);
+		INTLabel .setBounds(dim.x+ 20,dim.y+354,100, 25);	WISBox 	 .setBounds(dim.x+120,dim.y+354,100, 25);
 		CHRLabel .setBounds(dim.x+ 20,dim.y+390,100, 25);	CHRBox	 .setBounds(dim.x+120,dim.y+390,100, 25);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		Object source = event.getSource();
+		
+		if(source == raceBox) {
+		    this.master.resPanel.PIERbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.SLASbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.BLUDbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.ACIDbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.COLDbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.FIREbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.FORCbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.LIGHbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.NECRbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.POISbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.PSYCbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.RADIbox.setSelectedItem(ImmunityType.NONE);
+		    this.master.resPanel.THUNbox.setSelectedItem(ImmunityType.NONE);
+		    
+			switch((Race)raceBox.getSelectedItem()) {
+			case CUSTOM:
+				break;
+			case DWARF:
+				this.master.resPanel.POISbox.setSelectedItem(ImmunityType.RESISTANT);
+				break;
+			case ELF:
+				break;
+			case GNOME:
+				break;
+			case HALFLING:
+				break;
+			case HALF_ELF:
+				break;
+			case HALF_ORC:
+				break;
+			case HUMAN:
+				break;
+			case KOBOLD:
+				break;
+			case ORC:
+				break;
+			case TIEFLING:
+				this.master.resPanel.FIREbox.setSelectedItem(ImmunityType.RESISTANT);
+				break;
+			case BUGBEAR:
+				break;
+			case DRAGONBORN:
+				break;
+			case GOBLIN:
+				break;
+			case WARFORGED:
+				this.master.resPanel.POISbox.setSelectedItem(ImmunityType.RESISTANT);
+				break;
+			default:
+				break;
+			
+			}
+		}
 	}
 }
 
@@ -309,6 +420,18 @@ class WeaponRecord extends JPanel{
 		this.add(DMGbox		 );	DMGbox		.setBounds(bond.x+100,bond.y+ 5, 60, 20);
 		this.add(deleteButton);	deleteButton.setBounds(bond.x+185,bond.y+ 5, 45, 20);
 	}
+	
+	public WeaponRecord(DamageType dt, Integer dn, Die dit) {
+		this  .setBackground(new Color(100,145,165));
+		Rectangle bond = this.getBounds();
+		this.add(DICENObox	 );	DICENObox	.setBounds(bond.x+  5,bond.y+ 5, 35, 20);
+		this.add(DICETYPEbox );	DICETYPEbox .setBounds(bond.x+ 45,bond.y+ 5, 40, 20);
+		this.add(DMGbox		 );	DMGbox		.setBounds(bond.x+100,bond.y+ 5, 60, 20);
+		this.add(deleteButton);	deleteButton.setBounds(bond.x+185,bond.y+ 5, 45, 20);
+		this.DMGbox.setSelectedItem(dt);
+		this.DICENObox.setSelectedItem(dn);
+		this.DICETYPEbox .setSelectedItem(dit);
+	}
 }
 /*
 WeaponRecord wrc = new WeaponRecord();
@@ -356,7 +479,7 @@ class WeaponPanel extends JPanel implements ActionListener{
 		this.setBounds(bond.x,bond.y,bond.width,this.addRecord.getBounds().y+this.addRecord.getBounds().height+30-bond.y);
 	}
 	
-	private void updateTheLook(WeaponRecord record) {
+	public void updateTheLook(WeaponRecord record) {
 		this.records.add(record);
 		this.add(record);
 		record.deleteButton.addActionListener(this);

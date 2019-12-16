@@ -27,13 +27,14 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		
 	/// INIT UI
 	JButton newButton 	= new JButton("New  Simulation");
-	JButton saveButton	= new JButton("Save Simulation");
 	JButton loadButton 	= new JButton("Load Simulation");
 	JButton exitButton	= new JButton("Exit");
 	
 	/// ENCSET UI
-	TeamPanel blue_team = new TeamPanel("Blue team", TeamColor.BLUE);
-	TeamPanel red_team  = new TeamPanel("Red  team", TeamColor.RED );
+	TeamPanel blue_team = new TeamPanel	("Blue team", TeamColor.BLUE);
+	TeamPanel red_team  = new TeamPanel	("Red  team", TeamColor.RED );
+	JButton   saveButton= new JButton	("Save Simulation");
+	JButton	  backButton= new JButton	("Back");
 	
 	/// ENCINIT UI
 	
@@ -45,6 +46,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		loadButton	.addActionListener(this);
 		saveButton	.addActionListener(this);
 		exitButton	.addActionListener(this);
+		backButton	.addActionListener(this);  
 		
 		this.panel.add(newButton );
 		this.panel.add(saveButton);
@@ -52,6 +54,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		this.panel.add(exitButton);
 		this.panel.add(blue_team );
 		this.panel.add(red_team  );
+		this.panel.add(backButton);
 		setState(WindowState.INIT);
 	}
 	
@@ -69,38 +72,40 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	    		exitButton	.setVisible(false);
 	    		blue_team	.setVisible(false);
 	    		red_team 	.setVisible(false);
+	    		backButton 	.setVisible(false);
 	    			break;
 	    		
 	    	case ENCSET:
-	    		setSize(570, 360);
+	    		setSize(570, 460);
+	    		blue_team	.clear();
+	    		red_team	.clear(); 
 	    		newButton	.setVisible(false);
-	    		saveButton	.setVisible(false);
+	    		saveButton	.setVisible(true);
 	    		loadButton	.setVisible(false);
 	    		exitButton	.setVisible(false);
 	    		blue_team	.setVisible(true );
 	    		red_team 	.setVisible(true );
-	    		blue_team	.setBounds( 20, 20, 250, 280);
-	    		red_team 	.setBounds(290, 20, 250, 280);
+	    		backButton 	.setVisible(true );
+	    		blue_team	.setBounds( 20, 20,250,280);
+	    		red_team 	.setBounds(290, 20,250,280);
+	    		backButton	.setBounds( 20,320,250, 80);
+	    		saveButton	.setBounds(290,320,250, 80);
 	    			break;
 	    		
 	    	case INIT:
-	    		setSize(240, 540);
+	    		setSize(240, 420);
 	    		newButton	.setVisible(true );
-	    		saveButton	.setVisible(true );
+	    		saveButton	.setVisible(false );
 	    		loadButton	.setVisible(true );
 	    		exitButton	.setVisible(true );
 	    		blue_team	.setVisible(false);
 	    		red_team 	.setVisible(false);
+	    		backButton 	.setVisible(false);
 	    		newButton	.setBounds( 20, 20,200,100);
-	    		saveButton	.setBounds( 20,140,200,100);
-	    		loadButton	.setBounds( 20,260,200,100);
-	    		exitButton	.setBounds( 20,380,200,100);
+	    		loadButton	.setBounds( 20,140,200,100);
+	    		exitButton	.setBounds( 20,260,200,100);
 	    			break;
 		}
-	}
-	
-	public void saveCCFile(Entity entity) {
-		Program.save += entity.toString() + "\n";
 	}
 
 	@Override
@@ -117,15 +122,31 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		}
 		else
 		if(source == loadButton){
-			Program.setCurrentStatus(FileControler.fileToByteArray(this));
-			try{Program.saveToEntityList();} catch(Exception e) {Program.log("MainWindow.actionPerformed.loadButton: "+e.getMessage());}
-
-			for(TeamColor tm: TeamColor.values()) {
-				HashMap<Integer, Entity> temp = EntityRegister.getMap(tm);
-				for(Integer i: temp.keySet()) {
-					Program.print(temp.get(i).toString());
+			ArrayList<Byte> input = FileControler.fileToByteArray(this);
+			if(input!=null) {
+				Program.setCurrentStatus(input);
+				try{Program.saveToEntityList();} catch(Exception e) {Program.log("MainWindow.actionPerformed.loadButton: "+e.getMessage());}
+				this.setState(WindowState.ENCSET);
+				for(TeamColor tm: TeamColor.values()) {
+					HashMap<Integer, Entity> temp = EntityRegister.getMap(tm);
+					if(temp!=null) {
+						for(Integer i: temp.keySet()) {
+							Program.log(i);
+							if(tm == TeamColor.BLUE) {
+								this.blue_team.updateTheLook(i, temp.get(i));
+							}
+							else {
+								this.red_team .updateTheLook(i, temp.get(i));
+							}
+						}
+					}
 				}
+			/**/
 			}
+		}
+		else
+		if(source == backButton) {
+			this.setState(WindowState.INIT);
 		}
 		else
 		if(source == exitButton){
@@ -159,6 +180,18 @@ class CharacterRecord extends JPanel{
 		this.add(this.edit);
 	}
 	
+	public CharacterRecord(Entity ent) {
+		this.setBackground(new Color(200,200,200));
+		this.name.setText(ent.getName());
+		this.race.setText(ent.getRace().toString());
+		this.lvl.setText (" lvl "+Integer.toString(ent.getLvL()));
+		this.add(this.name);
+		this.add(this.race);
+		this.add(this.lvl );
+		this.add(this.dlte);
+		this.add(this.edit);
+	}
+	
 	@Override
 	public void setBounds(int x, int y, int w, int h) {
 		Rectangle bond = new Rectangle(x,y,w,h);
@@ -181,7 +214,7 @@ class TeamPanel extends JPanel implements ActionListener{
 	TeamColor color;
 	JLabel	title	  = new JLabel();
 	List<CharacterRecord> 
-			records   = new ArrayList<CharacterRecord>();
+			records   = new ArrayList<>();
 	JButton addRecord = new JButton("+");
 	
 	public TeamPanel(String title, TeamColor color) {
@@ -192,6 +225,13 @@ class TeamPanel extends JPanel implements ActionListener{
 		this.add(this.addRecord);
 		this.addRecord.addActionListener(this);
 		this.color = color;
+	}
+	
+	public void clear() {
+		for(CharacterRecord cr: records) {
+			this.remove(cr);
+		}
+		this.records.clear();
 	}
 	
 	@Override
@@ -206,8 +246,10 @@ class TeamPanel extends JPanel implements ActionListener{
 	private void updateTheLook() {
 		Rectangle bond = this.getBounds();
 		int tempX = bond.width/10, tempY = bond.height/10;
-		for(int i = 0; i<records.size();i++) 
-		{records.get(i).setBounds(tempX/2, tempY*(2+i*2), tempX*9, (tempY*3)/2);}
+		for(int i = 0; i<records.size();i++){
+			records.get(i).setLayout(null);
+			records.get(i).setBounds(tempX/2, tempY*(2+i*2), tempX*9, (tempY*3)/2);
+		}
 		
 		if(this.records.size()==0) this.addRecord.setBounds(tempX/2, tempY*2, tempX*9, (tempY*3)/2);
 		else { 
@@ -218,10 +260,22 @@ class TeamPanel extends JPanel implements ActionListener{
 		this.repaint();
 	}
 	
+	public void updateTheLook(int index, Entity ent) {
+		CharacterRecord record = new CharacterRecord(ent);
+		CharacterRecord temp   = this.records.size()<=index? null:this.records.get(index);
+		this.records.add(record);
+		if(temp!=null)	this.remove(temp);
+		this.add(record );
+		record.dlte.addActionListener(this);
+		record.edit.addActionListener(this);
+		updateTheLook();
+	}
+	
 	public void updateTheLook(CharacterRecord record) {
 		this.records.add(record);
 		this.add(record);
 		record.dlte.addActionListener(this);
+		record.edit.addActionListener(this);
 		updateTheLook();
 	}
 	
@@ -243,8 +297,8 @@ class TeamPanel extends JPanel implements ActionListener{
 					}
 					else 
 					if(source == records.get(i).edit) {
-						//new CCWindow(Program.mainWindow, this.color, i);
-						Program.log("NOT YET IMPLEMENTED");
+						new CCWindow(Program.mainWindow, this.color, i, EntityRegister.get(this.color, i));
+						//Program.log("NOT YET IMPLEMENTED");
 					}
 				}
 			}

@@ -63,6 +63,9 @@ public class Weapon {
 		}
 	}
 	
+	public String getName() {
+		return this.name;
+	}
 
 	public Boolean getProfficient() {
 		return profficient;
