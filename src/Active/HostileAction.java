@@ -1,10 +1,5 @@
 package Active;
 
-public class HostileAction extends Action implements Counterable {
+public class HostileAction extends Action{
 	
-	@Override
-	public boolean getCountered(int roll) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

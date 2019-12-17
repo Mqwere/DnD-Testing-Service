@@ -3,6 +3,7 @@ package Core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Enums.Core.DNDClass;
 import Enums.Core.ImmunityType;
 import Enums.Core.Race;
 import Enums.Core.SaveState;
@@ -46,7 +47,6 @@ public class Program {
 		Weapon	   tempW = new Weapon();
 		int		   tempI = 0;
 		Die		   tempD = null;
-		DamageType tempDT = null;
 		
 		for(String line: input) {
 			lineNo++;
@@ -56,8 +56,6 @@ public class Program {
 					if(tempE!=null) {
 						tempE.setWeapon(tempW);
 						EntityRegister.put(tempE.color,tempE);
-						//Program.log("tempE.color: "+tempE.color);
-						Program.log("EntityRegister"+tempE.color+" map size: "+EntityRegister.getMap(tempE.color).size());
 					}
 					currSS = SaveState.CCOPEN;
 					tempE = new Entity();
@@ -199,6 +197,14 @@ public class Program {
 							if(line=="RED") tempE.color = TeamColor.RED;
 							else 			tempE.color = TeamColor.BLUE;
 							break;
+							
+						default:
+							String[] subline = line.split(" ");
+							if(subline.length>1)
+							for(DNDClass cl: DNDClass.values()) {
+								if(subline[0].equals(cl.toString())) tempE.setClass(cl, Integer.parseInt(subline[1]));
+							}
+							break;
 						}
 						break;
 					case DMGOPEN:
@@ -206,17 +212,12 @@ public class Program {
 						case 0: tempI = Integer.parseInt(line);	 break;
 						case 1:	
 							for(Die d: Die.values()) {
-								if(d.value == Integer.parseInt(line)) {
-									tempD = d;
-								}
+								if(d.value == Integer.parseInt(line)) tempD = d;
 							}
 						break;
 						case 2:	 
 							for(DamageType dt: DamageType.values()) {
-								if(dt.arrValue == Integer.parseInt(line)) {
-									tempDT = dt;
-									tempW.addDmg(tempI, tempD, tempDT);
-								}
+								if(dt.arrValue == Integer.parseInt(line)) tempW.addDmg(tempI, tempD, dt);
 							}
 						break;
 						}
@@ -228,9 +229,7 @@ public class Program {
 						break;
 						case 1:	
 							for(DamageType dt: DamageType.values()) {
-								if(dt.arrValue == Integer.parseInt(line)) {
-									tempW.setDmType(dt);
-								}
+								if(dt.arrValue == Integer.parseInt(line)) tempW.setDmType(dt);
 							}
 						break;
 						case 2:	 
