@@ -3,6 +3,8 @@ package Core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import Enums.Core.DNDClass;
 import Enums.Core.ImmunityType;
 import Enums.Core.Race;
@@ -17,6 +19,25 @@ import UI.MainWindow;
 public class Program {
 	
 	public static MainWindow mainWindow;
+	
+	public static void error(Object message) {
+		String output = new String();
+		if(message.getClass() == String.class) {
+			String obj = (String)message;
+			output = obj;
+		}
+		else
+		if(message.getClass() == Boolean.class) {
+			Boolean obj = (Boolean) message;
+			output = Boolean.toString(obj);
+		}
+		else {
+			output = message.toString();
+		}
+		
+		JOptionPane.showMessageDialog(Program.mainWindow, output);
+		
+	}
 	
 	public static void print(Object message) {
 		if(message.getClass() == String.class) {
@@ -103,101 +124,105 @@ public class Program {
 						case  9:	tempE.WIS.setValue(Integer.parseInt(line)); if(tempE.WIS.value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
 						case 10:	tempE.CHR.setValue(Integer.parseInt(line)); if(tempE.CHR.value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
 						case 11: 
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.PIER,it);	break;
 						case 12:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.SLAS,it);	break;
 						case 13:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.BLUD,it);	break;
 						case 14:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.ACID,it);	break;
 						case 15:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.COLD,it);	break;
 						case 16:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.FIRE,it);	break;
 						case 17:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.FORC,it);	break;
 						case 18:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.LIGH,it);	break;
 						case 19:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.NECR,it);	break;
 						case 20:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.POIS,it);	break;
 						case 21:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.PSYC,it);	break;
 						case 22:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.RADI,it);	break;
 						case 23:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.THUN,it);	break;
 						case 24:
-							if(line=="RED") tempE.color = TeamColor.RED;
-							else 			tempE.color = TeamColor.BLUE;
-							break;
-							
+							if(line.equals("RED")) tempE.color = TeamColor.RED;
+							else if (line.equals("BLUE")) tempE.color = TeamColor.BLUE;
+							else {
+								Program.error("We fecked if up: '"+line+"'");
+								tempE = null;
+								return;
+							}
+							break;							
 						default:
 							String[] subline = line.split(" ");
 							if(subline.length>1)
@@ -236,7 +261,7 @@ public class Program {
 							tempW.setProfficient(Boolean.parseBoolean(line));
 						break;
 						case 3:	 
-							if(line=="finesse") tempW.setWpType(WeaponType.FINESSE);
+							if(line.equals("finesse")) tempW.setWpType(WeaponType.FINESSE);
 							else 				tempW.setWpType(WeaponType.NORMAL);
 						break;
 						}
