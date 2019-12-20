@@ -108,11 +108,11 @@ public class Program {
 								}
 							}	
 							if(tempE.race == null) {
-								Program.log("STELL ERROR: Race null, line: "+line+"\n");
+								Program.error("Program.saveToEntityList.CCOPEN: Race null, line: "+line+"\n");
 								tempE.race = Race.CUSTOM;
 							}
 							} catch(Exception e) {
-								Program.log("Program.saveToEntityList.CCOPEN: "+e.getMessage());
+								Program.error("Program.saveToEntityList.CCOPEN: "+e.getMessage());
 							}break;
 						case  2:	tempE.level 	 = Integer.parseInt(line);	break;
 						case  3:	tempE.maxHP 	 = Integer.parseInt(line);  break;
@@ -218,7 +218,7 @@ public class Program {
 							if(line.equals("RED")) tempE.color = TeamColor.RED;
 							else if (line.equals("BLUE")) tempE.color = TeamColor.BLUE;
 							else {
-								Program.error("We fecked if up: '"+line+"'");
+								Program.error("Team is NULL for some reason: '"+line+"'");
 								tempE = null;
 								return;
 							}

@@ -1,5 +1,5 @@
 package Interfaces.Active;
 
-public interface SavingThrowable {
+public interface Resistable {
 	public Integer getDC();
 }

@@ -3,17 +3,17 @@ package Active;
 import Core.Entity;
 import Enums.Core.EffectEffect;
 import Enums.Support.Die;
-import Interfaces.Active.SavingThrowable;
+import Interfaces.Active.Resistable;
 
-public class HarmfulEffect extends Effect implements SavingThrowable{
+public class ResistableEffect extends Effect implements Resistable{
 	private Integer DC;
 	
-	public HarmfulEffect(Entity performer, EffectEffect attrib, 
+	public ResistableEffect(Entity performer, EffectEffect attrib, 
 			int value) {
 		super(performer, attrib, value);
 	}
 
-	public HarmfulEffect(Entity performer, EffectEffect attrib, 
+	public ResistableEffect(Entity performer, EffectEffect attrib, 
 			Die valDie, int valDieNo, int value) {
 		super(performer, attrib, valDie, valDieNo, value);
 	}
