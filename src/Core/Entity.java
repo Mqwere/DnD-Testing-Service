@@ -31,13 +31,17 @@ public class Entity{
 			  maxHP,
 			  armorClass;
 	
-	public Skill 	
+	public EnumMap<SkillName,Skill> 
+	skills = new EnumMap<>(SkillName.class);
+	/*
+		
 			  STR = new Skill(SkillName.STR),
 			  DEX = new Skill(SkillName.DEX),
 			  CON = new Skill(SkillName.CON),
 			  INT = new Skill(SkillName.INT),
 			  WIS = new Skill(SkillName.WIS),
 			  CHR = new Skill(SkillName.CHR);
+	/**/
 	
 	EnumMap<DamageType,ImmunityType>
 			  resistanceMap = new EnumMap<>(DamageType.class);
@@ -47,17 +51,23 @@ public class Entity{
 	//////
 	
 	public Entity() {
-		
+		skills.put(SkillName.STR,new Skill(SkillName.STR));
+		skills.put(SkillName.DEX,new Skill(SkillName.DEX));
+		skills.put(SkillName.CON,new Skill(SkillName.CON));
+		skills.put(SkillName.INT,new Skill(SkillName.INT));
+		skills.put(SkillName.WIS,new Skill(SkillName.WIS));
+		skills.put(SkillName.CHR,new Skill(SkillName.CHR));
 	}
 	
 	public Entity(Race race) {
+		this();
 		this.race = race;
 		defaultizeResistances();
 	}
 	
 	public Entity(Race race, String name, Integer level, Integer maxHP, Integer armorClass,
 			Integer STR, Integer DEX, Integer CON, Integer INT, Integer WIS, Integer CHR) {
-		this.race = race;
+		this(race);
 		this.name = name;
 		this.level = level;
 		this.maxHP = maxHP; this.currHP = maxHP;
@@ -90,13 +100,25 @@ public class Entity{
 		return this.maxHP;
 	}
 	
+	public void setHP(int hp) {
+		this.maxHP = hp;
+	}
+	
+	public Integer getAC() {
+		return this.armorClass;
+	}
+	
+	public void setAC(Integer AC) {
+		this.armorClass = AC;
+	}
+	
 	public void setSkills(int STR, int DEX, int CON, int INT, int WIS, int CHR) {
-		this.STR.setValue(STR);
-		this.DEX.setValue(DEX);
-		this.CON.setValue(CON);
-		this.INT.setValue(INT);
-		this.WIS.setValue(WIS);
-		this.CHR.setValue(CHR);		
+		this.skills.get(SkillName.STR).setValue(STR);
+		this.skills.get(SkillName.DEX).setValue(DEX);
+		this.skills.get(SkillName.CON).setValue(CON);
+		this.skills.get(SkillName.INT).setValue(INT);
+		this.skills.get(SkillName.WIS).setValue(WIS);
+		this.skills.get(SkillName.CHR).setValue(CHR);	
 	}
 	
 	public void setWeapon(Weapon weapon) {
@@ -126,6 +148,37 @@ public class Entity{
 	
 	public ImmunityType getResistance(DamageType dt) {
 		return this.resistanceMap.get(dt);
+	}
+	
+	public void setSkillV(SkillName name, Integer value) {this.skills.get(name).setValue(value);}
+	
+	public Integer getSkillV(SkillName name) {return this.skills.get(name).value;}
+	
+	public Integer getSkillM(SkillName name) {return this.skills.get(name).modifier;}
+	
+	public void offsetResistance(int offset, DamageType dt) {
+		switch(this.resistanceMap.get(dt)){
+	    case VULNERABLE:
+            if(offset>2)        this.resistanceMap.put(dt, ImmunityType.IMMUNE);
+            else if(offset==2)  this.resistanceMap.put(dt, ImmunityType.RESISTANT);
+            else if(offset==1)  this.resistanceMap.put(dt, ImmunityType.NONE);  
+	    	break; 
+	    case NONE:
+            if(offset>1)        this.resistanceMap.put(dt, ImmunityType.IMMUNE);
+            else if(offset==1)  this.resistanceMap.put(dt, ImmunityType.RESISTANT);
+            else if(offset<=-1) this.resistanceMap.put(dt, ImmunityType.VULNERABLE);  
+	    	break;
+	    case RESISTANT:
+            if(offset>0)        this.resistanceMap.put(dt, ImmunityType.IMMUNE);
+            else if(offset==-1) this.resistanceMap.put(dt, ImmunityType.NONE);
+            else if(offset<-1)  this.resistanceMap.put(dt, ImmunityType.VULNERABLE);  
+	    	break;
+	    case IMMUNE:
+            if(offset==-1)      this.resistanceMap.put(dt, ImmunityType.RESISTANT);
+            else if(offset==-2) this.resistanceMap.put(dt, ImmunityType.NONE);
+            else if(offset<-2)  this.resistanceMap.put(dt, ImmunityType.VULNERABLE);  
+	    	break;             
+        }
 	}
 	
 	public void realizeTheClasses() {
@@ -272,20 +325,21 @@ public class Entity{
 			}
 		}
 	}
-
+	
+	public void takeDamage(int value) {this.currHP -= value;}
 	
 	public void takeDamage(int value, DamageType type) {
 		switch(resistanceMap.get(type)) {
 			case VULNERABLE:
-				this.currHP -= value*2;
+				this.takeDamage(value*2);
 				break;
 		
 			case NONE:
-				this.currHP -= value;
+				this.takeDamage(value);
 				break;
 				
 			case RESISTANT:
-				this.currHP -= (value/2);
+				this.takeDamage(value/2);
 				break;
 				
 			case IMMUNE:
@@ -302,12 +356,12 @@ public class Entity{
 		output += this.level+"\n";
 		output += this.maxHP+"\n";
 		output += this.armorClass+"\n";
-		output += this.STR.value+"\n";
-		output += this.DEX.value+"\n";
-		output += this.CON.value+"\n";
-		output += this.INT.value+"\n";
-		output += this.WIS.value+"\n";
-		output += this.CHR.value;
+        output += this.skills.get(SkillName.STR).value+"\n";
+        output += this.skills.get(SkillName.DEX).value+"\n";
+        output += this.skills.get(SkillName.CON).value+"\n";
+        output += this.skills.get(SkillName.INT).value+"\n";
+        output += this.skills.get(SkillName.WIS).value+"\n";
+        output += this.skills.get(SkillName.CHR).value;
 		for(DamageType dmg: DamageType.values()) {output +="\n"+resistanceMap.get(dmg);}
 		output +="\n" + this.color;
 		for(DNDClass cl: classMap.keySet()) {output +="\n"+cl+" "+classMap.get(cl);}

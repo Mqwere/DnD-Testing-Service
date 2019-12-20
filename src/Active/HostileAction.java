@@ -1,5 +1,7 @@
 package Active;
 
+import Interfaces.Active.SavingThrowable;
+
 public class HostileAction extends Action implements SavingThrowable{
 	private Integer DC;
 	

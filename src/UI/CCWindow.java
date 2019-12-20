@@ -23,6 +23,7 @@ import Enums.Core.TeamColor;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
+import Enums.Support.SkillName;
 import Support.DamagePackage;
 import Support.EntityRegister;
 
@@ -70,12 +71,12 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.statPanel.hpField	.setText(Integer.toString(ent.getHP()));
 		this.statPanel.lvlChoice.setSelectedItem(ent.getLvL());
 		this.statPanel.raceBox	.setSelectedItem(ent.getRace());
-		this.statPanel.STRBox	.setSelectedItem(ent.STR.value);
-		this.statPanel.DEXBox	.setSelectedItem(ent.DEX.value);
-		this.statPanel.CONBox	.setSelectedItem(ent.CON.value);
-		this.statPanel.INTBox	.setSelectedItem(ent.INT.value);
-		this.statPanel.WISBox	.setSelectedItem(ent.WIS.value);
-		this.statPanel.CHRBox	.setSelectedItem(ent.CHR.value);
+		this.statPanel.STRBox	.setSelectedItem(ent.getSkillV(SkillName.STR));
+		this.statPanel.DEXBox	.setSelectedItem(ent.getSkillV(SkillName.DEX));
+		this.statPanel.CONBox	.setSelectedItem(ent.getSkillV(SkillName.CON));
+		this.statPanel.INTBox	.setSelectedItem(ent.getSkillV(SkillName.INT));
+		this.statPanel.WISBox	.setSelectedItem(ent.getSkillV(SkillName.WIS));
+		this.statPanel.CHRBox	.setSelectedItem(ent.getSkillV(SkillName.CHR));
 		/// ===================
 		this.resPanel.PIERbox.setSelectedItem(ent.getResistance(DamageType.PIER));
 		this.resPanel.SLASbox.setSelectedItem(ent.getResistance(DamageType.SLAS));

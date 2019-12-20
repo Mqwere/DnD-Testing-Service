@@ -13,12 +13,15 @@ import Enums.Core.TeamColor;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
+import Enums.Support.SkillName;
 import Support.EntityRegister;
 import UI.MainWindow;
 
 public class Program {
 	
 	public static MainWindow mainWindow;
+
+	public static String save = new String();
 	
 	public static void error(Object message) {
 		String output = new String();
@@ -36,7 +39,6 @@ public class Program {
 		}
 		
 		JOptionPane.showMessageDialog(Program.mainWindow, output);
-		
 	}
 	
 	public static void print(Object message) {
@@ -57,8 +59,6 @@ public class Program {
 	public static void log(Object message) {
 		Program.print("\n "+message);
 	}
-	
-	public static String save = new String();
 	
 	public static void saveToEntityList() {
 		String[]   input = save.split("\n");
@@ -117,12 +117,12 @@ public class Program {
 						case  2:	tempE.level 	 = Integer.parseInt(line);	break;
 						case  3:	tempE.maxHP 	 = Integer.parseInt(line);  break;
 						case  4:	tempE.armorClass = Integer.parseInt(line);  break;
-						case  5:	tempE.STR.setValue(Integer.parseInt(line)); if(tempE.STR.value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
-						case  6:	tempE.DEX.setValue(Integer.parseInt(line)); if(tempE.DEX.value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
-						case  7:	tempE.CON.setValue(Integer.parseInt(line)); if(tempE.CON.value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
-						case  8:	tempE.INT.setValue(Integer.parseInt(line)); if(tempE.INT.value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
-						case  9:	tempE.WIS.setValue(Integer.parseInt(line)); if(tempE.WIS.value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
-						case 10:	tempE.CHR.setValue(Integer.parseInt(line)); if(tempE.CHR.value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
+					    case  5:	tempE.skills.get(SkillName.STR).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.STR).value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
+						case  6:	tempE.skills.get(SkillName.DEX).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.DEX).value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
+						case  7:	tempE.skills.get(SkillName.CON).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.CON).value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
+						case  8:	tempE.skills.get(SkillName.INT).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.INT).value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
+						case  9:	tempE.skills.get(SkillName.WIS).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.WIS).value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
+						case 10:	tempE.skills.get(SkillName.CHR).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.CHR).value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
 						case 11: 
 							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
 							else if(line.equals("NONE"))  it = ImmunityType.NONE;
