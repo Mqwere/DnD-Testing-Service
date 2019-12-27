@@ -15,6 +15,7 @@ import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.SkillName;
 import Support.EntityRegister;
+import Support.TextEditor;
 import UI.MainWindow;
 
 public class Program {
@@ -294,15 +295,17 @@ public class Program {
 	
 	public static void setCurrentStatus(ArrayList<Byte> array) {
 		String boop = new String();
-		for(Byte b: array) {
+		for(Byte b: array)
 			boop += (char)Byte.toUnsignedInt(b);
-		}
 		Program.save = boop;
 	}
 
 	public static void main(String[] args) {
 		Program.mainWindow = new MainWindow();
-		//new CCWindow();
+				
+		//String input = new String("Well, let just see if that\n could possibly work with this\n static function I just made.");
+		//Program.log(input+"\n\n "+input+"\n");
+		//Program.log(TextEditor.htmlize(input+"\n "+input));
 	}
 
 }

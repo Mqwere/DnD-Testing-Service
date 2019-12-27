@@ -19,6 +19,7 @@ import Enums.Core.Race;
 import Enums.Core.TeamColor;
 import Enums.UI.WindowState;
 import Support.EntityRegister;
+import Support.TextEditor;
 
 public class MainWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -26,15 +27,16 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	WindowState state;
 		
 	/// INIT UI
-	JButton newButton 	= new JButton("New  Simulation");
-	JButton loadButton 	= new JButton("Load Simulation");
-	JButton exitButton	= new JButton("Exit");
+	JButton newButton 	 = new JButton("New  Simulation");
+	JButton loadButton 	 = new JButton("Load Simulation");
+	JButton exitButton	 = new JButton("Exit");
 	
 	/// ENCSET UI
-	TeamPanel blue_team = new TeamPanel	("Blue team", TeamColor.BLUE);
-	TeamPanel red_team  = new TeamPanel	("Red  team", TeamColor.RED );
-	JButton   saveButton= new JButton	("Save Simulation");
-	JButton	  backButton= new JButton	("Back");
+	TeamPanel blue_team  = new TeamPanel(TextEditor.htmlize("Blue team",5), TeamColor.BLUE);
+	TeamPanel red_team   = new TeamPanel(TextEditor.htmlize("Red  team",5), TeamColor.RED );
+	JButton   startButton= new JButton	(TextEditor.htmlize("Start Simulation",4));
+	JButton   saveButton = new JButton	(TextEditor.htmlize("Save\nSimulation",true, 4));
+	JButton	  backButton = new JButton	(TextEditor.htmlize("Back",4));
 	
 	/// ENCINIT UI
 	
@@ -43,12 +45,14 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		this.setTitle("DnD Testing Service");
 
 		newButton	.addActionListener(this);
+		startButton .addActionListener(this);
 		loadButton	.addActionListener(this);
 		saveButton	.addActionListener(this);
 		exitButton	.addActionListener(this);
 		backButton	.addActionListener(this);  
 		
 		this.panel.add(newButton );
+		this.panel.add(startButton);
 		this.panel.add(saveButton);
 		this.panel.add(loadButton);
 		this.panel.add(exitButton);
@@ -56,10 +60,6 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		this.panel.add(red_team  );
 		this.panel.add(backButton);
 		setState(WindowState.INIT);
-	}
-	
-	public	void createCharacter(CharacterRecord record, TeamPanel panel) {
-		
 	}
 	
 	private void setState(WindowState state) {
@@ -88,8 +88,9 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	    		backButton 	.setVisible(true );
 	    		blue_team	.setBounds( 20, 20,250,280);
 	    		red_team 	.setBounds(290, 20,250,280);
-	    		backButton	.setBounds( 20,320,250, 80);
-	    		saveButton	.setBounds(290,320,250, 80);
+	    		backButton	.setBounds( 20,320,180, 80);
+	    		saveButton	.setBounds(220,320,120, 80);
+	    		startButton .setBounds(360,320,180, 80);
 	    			break;
 	    		
 	    	case INIT:
@@ -215,7 +216,7 @@ class TeamPanel extends JPanel implements ActionListener{
 	JLabel	title	  = new JLabel();
 	List<CharacterRecord> 
 			records   = new ArrayList<>();
-	JButton addRecord = new JButton("+");
+	JButton addRecord = new JButton(TextEditor.htmlize("+",6));
 	
 	public TeamPanel(String title, TeamColor color) {
 		this.setBackground(new Color(180,180,180));

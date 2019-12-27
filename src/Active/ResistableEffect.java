@@ -9,13 +9,15 @@ public class ResistableEffect extends Effect implements Resistable{
 	private Integer DC;
 	
 	public ResistableEffect(Entity performer, EffectEffect attrib, 
-			int value) {
+			int value, int DC) {
 		super(performer, attrib, value);
+		this.setDC(DC);
 	}
 
 	public ResistableEffect(Entity performer, EffectEffect attrib, 
-			Die valDie, int valDieNo, int value) {
+			Die valDie, int valDieNo, int value, int DC) {
 		super(performer, attrib, valDie, valDieNo, value);
+		this.setDC(DC);
 	}
 	
 	public void	setDC(Integer dc) {this.DC = dc;}
