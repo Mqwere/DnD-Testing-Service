@@ -13,9 +13,8 @@ import Enums.Core.TeamColor;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
-import Enums.Support.SkillName;
+import Enums.Support.PropertyName;
 import Support.EntityRegister;
-import Support.TextEditor;
 import UI.MainWindow;
 
 public class Program {
@@ -117,13 +116,13 @@ public class Program {
 							}break;
 						case  2:	tempE.level 	 = Integer.parseInt(line);	break;
 						case  3:	tempE.maxHP 	 = Integer.parseInt(line);  break;
-						case  4:	tempE.armorClass = Integer.parseInt(line);  break;
-					    case  5:	tempE.skills.get(SkillName.STR).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.STR).value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
-						case  6:	tempE.skills.get(SkillName.DEX).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.DEX).value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
-						case  7:	tempE.skills.get(SkillName.CON).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.CON).value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
-						case  8:	tempE.skills.get(SkillName.INT).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.INT).value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
-						case  9:	tempE.skills.get(SkillName.WIS).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.WIS).value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
-						case 10:	tempE.skills.get(SkillName.CHR).setValue(Integer.parseInt(line)); if(tempE.skills.get(SkillName.CHR).value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
+						case  4:	tempE.props.get(PropertyName.AC ).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.AC ).value == 0) 		Program.log("STEL ERROR: AC  NULL"); break;
+					    case  5:	tempE.props.get(PropertyName.STR).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.STR).value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
+						case  6:	tempE.props.get(PropertyName.DEX).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.DEX).value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
+						case  7:	tempE.props.get(PropertyName.CON).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.CON).value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
+						case  8:	tempE.props.get(PropertyName.INT).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.INT).value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
+						case  9:	tempE.props.get(PropertyName.WIS).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.WIS).value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
+						case 10:	tempE.props.get(PropertyName.CHR).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.CHR).value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
 						case 11: 
 							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
 							else if(line.equals("NONE"))  it = ImmunityType.NONE;
@@ -229,6 +228,7 @@ public class Program {
 							if(subline.length>1)
 							for(DNDClass cl: DNDClass.values()) {
 								if(subline[0].equals(cl.toString())) tempE.setClass(cl, Integer.parseInt(subline[1]));
+								if(subline.length>2) tempE.classMap.get(cl).isPrimary = true;
 							}
 							break;
 						}
@@ -306,6 +306,8 @@ public class Program {
 		//String input = new String("Well, let just see if that\n could possibly work with this\n static function I just made.");
 		//Program.log(input+"\n\n "+input+"\n");
 		//Program.log(TextEditor.htmlize(input+"\n "+input));
+		
+		//Program.print(Entity.customChara().toString());
 	}
 
 }

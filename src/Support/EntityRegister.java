@@ -10,9 +10,12 @@ import Enums.Core.TeamColor;
 
 public class EntityRegister{
 	
-	@SuppressWarnings("unused")
 	private static EnumMap<TeamColor,HashMap<Integer,Entity>> entityMap = 
 			  new EnumMap<TeamColor,HashMap<Integer,Entity>>(TeamColor.class);
+	
+	private static void sort() {
+		
+	}
 	
 	public static void put(TeamColor color, Entity ent) {
 		if(EntityRegister.entityMap.get(color) == null) {

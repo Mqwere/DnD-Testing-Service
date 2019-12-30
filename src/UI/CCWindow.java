@@ -23,7 +23,7 @@ import Enums.Core.TeamColor;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
-import Enums.Support.SkillName;
+import Enums.Support.PropertyName;
 import Support.DamagePackage;
 import Support.EntityRegister;
 
@@ -71,12 +71,12 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.statPanel.hpField	.setText(Integer.toString(ent.getHP()));
 		this.statPanel.lvlChoice.setSelectedItem(ent.getLvL());
 		this.statPanel.raceBox	.setSelectedItem(ent.getRace());
-		this.statPanel.STRBox	.setSelectedItem(ent.getSkillV(SkillName.STR));
-		this.statPanel.DEXBox	.setSelectedItem(ent.getSkillV(SkillName.DEX));
-		this.statPanel.CONBox	.setSelectedItem(ent.getSkillV(SkillName.CON));
-		this.statPanel.INTBox	.setSelectedItem(ent.getSkillV(SkillName.INT));
-		this.statPanel.WISBox	.setSelectedItem(ent.getSkillV(SkillName.WIS));
-		this.statPanel.CHRBox	.setSelectedItem(ent.getSkillV(SkillName.CHR));
+		this.statPanel.STRBox	.setSelectedItem(ent.getSkillV(PropertyName.STR));
+		this.statPanel.DEXBox	.setSelectedItem(ent.getSkillV(PropertyName.DEX));
+		this.statPanel.CONBox	.setSelectedItem(ent.getSkillV(PropertyName.CON));
+		this.statPanel.INTBox	.setSelectedItem(ent.getSkillV(PropertyName.INT));
+		this.statPanel.WISBox	.setSelectedItem(ent.getSkillV(PropertyName.WIS));
+		this.statPanel.CHRBox	.setSelectedItem(ent.getSkillV(PropertyName.CHR));
 		/// ===================
 		this.resPanel.PIERbox.setSelectedItem(ent.getResistance(DamageType.PIER));
 		this.resPanel.SLASbox.setSelectedItem(ent.getResistance(DamageType.SLAS));
@@ -97,9 +97,8 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.wepPanel.profBox	.setSelected	(tmp.getProfficient());
 		this.wepPanel.enhancBox	.setSelectedItem(tmp.getEnhancement());
 		this.wepPanel.wtBox		.setSelectedItem(tmp.getWpType());
-		for(DamagePackage dp: tmp.damage) {
+		for(DamagePackage dp: tmp.damage)
 			this.wepPanel.updateTheLook(new WeaponRecord(dp.dmgType,dp.dieNo,dp.dieSize));
-		}
 	}
 	
 	private void setContent() {
@@ -161,20 +160,20 @@ public class CCWindow extends DNDWindow implements ActionListener{
 			putout.setProfficient(this.wepPanel.profBox.isSelected());
 			output.setWeapon(putout);
 			
-			if(!this.edit)	{
-				if(this.ccolor == TeamColor.BLUE) 
-					 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
-				else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
+			//if(!this.edit)	{
+			if(this.ccolor == TeamColor.BLUE) 
+				 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
+			else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
 				
-				EntityRegister.put(this.ccolor, output);
-			}
-			else {
+			EntityRegister.put(this.ccolor, output);
+			//}
+			/*else {
 				if(this.ccolor == TeamColor.BLUE) 
 					 this.parent.blue_team	.updateTheLook(cint,output);
 				else this.parent.red_team	.updateTheLook(cint,output);
 				
 				EntityRegister.put(this.ccolor, cint, output);
-			}	
+			}	*/
 			
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}

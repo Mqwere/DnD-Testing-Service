@@ -8,7 +8,7 @@ import Enums.Core.Enhancement;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
-import Enums.Support.SkillName;
+import Enums.Support.PropertyName;
 import Support.DamagePackage;
 import Support.Roller;
 
@@ -49,16 +49,16 @@ public class Weapon {
 	
 	public void dealDmg(Entity user, Entity target) {
 		int theRoll = Roller.roll(Die.D20) + (this.profficient ? user.getProficiency():0) + 
-		(this.wpType==WeaponType.NORMAL?user.getSkillM(SkillName.STR):user.getSkillM(SkillName.DEX)) + this.enhancement.value;
-		if(theRoll>=target.armorClass) {
+		(this.wpType==WeaponType.NORMAL?user.getSkillM(PropertyName.STR):user.getSkillM(PropertyName.DEX)) + this.enhancement.value;
+		if(theRoll>=target.getAC()) {
 			for(DamagePackage dmpc: damage) {target.takeDamage(dmpc.resolve(), dmpc.dmgType);}
 			switch(wpType) {
 				case NORMAL:
-					target.takeDamage(user.getSkillM(SkillName.STR), dmType);
+					target.takeDamage(user.getSkillM(PropertyName.STR), dmType);
 					break;
 			
 				case FINESSE:
-					target.takeDamage(user.getSkillM(SkillName.DEX), dmType);
+					target.takeDamage(user.getSkillM(PropertyName.DEX), dmType);
 					break;
 			}
 		}

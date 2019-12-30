@@ -133,12 +133,10 @@ public class MainWindow extends DNDWindow implements ActionListener{
 					if(temp!=null) {
 						for(Integer i: temp.keySet()) {
 							Program.log(i);
-							if(tm == TeamColor.BLUE) {
+							if(tm == TeamColor.BLUE)
 								this.blue_team.updateTheLook(i, temp.get(i));
-							}
-							else {
+							else 
 								this.red_team .updateTheLook(i, temp.get(i));
-							}
 						}
 					}
 				}
@@ -263,9 +261,9 @@ class TeamPanel extends JPanel implements ActionListener{
 	
 	public void updateTheLook(int index, Entity ent) {
 		CharacterRecord record = new CharacterRecord(ent);
-		CharacterRecord temp   = this.records.size()<=index? null:this.records.get(index);
-		this.records.add(record);
+		CharacterRecord temp   = this.records.size()<=index? null:/**/this.records.get(index);
 		if(temp!=null)	this.remove(temp);
+		this.records.add(record);
 		this.add(record );
 		record.dlte.addActionListener(this);
 		record.edit.addActionListener(this);
@@ -293,12 +291,15 @@ class TeamPanel extends JPanel implements ActionListener{
 					if(source == records.get(i).dlte) {
 						this.remove(records.get(i));
 						EntityRegister.rem(this.color, i);
-						records.remove(i);
+						this.records.remove(i);
 						updateTheLook();
 					}
 					else 
 					if(source == records.get(i).edit) {
 						new CCWindow(Program.mainWindow, this.color, i, EntityRegister.get(this.color, i));
+						this.remove(records.get(i));
+						EntityRegister.rem(this.color, i);
+						this.records.remove(i);
 						//Program.log("NOT YET IMPLEMENTED");
 					}
 				}
