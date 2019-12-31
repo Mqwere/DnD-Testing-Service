@@ -161,11 +161,11 @@ public class CCWindow extends DNDWindow implements ActionListener{
 			output.setWeapon(putout);
 			
 			//if(!this.edit)	{
+			EntityRegister.put(this.ccolor, output);
 			if(this.ccolor == TeamColor.BLUE) 
 				 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
 			else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
 				
-			EntityRegister.put(this.ccolor, output);
 			//}
 			/*else {
 				if(this.ccolor == TeamColor.BLUE) 
@@ -210,9 +210,9 @@ class StatPanel extends JPanel implements ActionListener{
 	JTextField acField	= new JTextField("10");
 	Integer[] lvlPoss 	= {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}; 
 	JComboBox<Integer> 
-		lvlChoice		= new JComboBox<Integer>(lvlPoss);
+			lvlChoice	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Race> 
-		raceBox 		= new JComboBox<Race>(Race.values());
+			raceBox 	= new JComboBox<Race>(Race.values());
 	
 	JComboBox<Integer> STRBox 	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Integer> DEXBox 	= new JComboBox<Integer>(lvlPoss);

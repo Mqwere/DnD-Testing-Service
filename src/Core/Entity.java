@@ -22,7 +22,9 @@ public class Entity{
 	
 	public ArrayList<ArrayList<Effect>> effectQueue = new ArrayList<ArrayList<Effect>>();
 	
-	///////
+	/////// Fields 
+	public static int statID = 0;
+	public int ID;
 	
 	/////// Fields that the program needs to save / load
 	String	  name;
@@ -55,9 +57,9 @@ public class Entity{
 	
 	EnumMap<DNDClass,DClass>
 			  classMap 	  = new EnumMap<>(DNDClass.class);
-	//////
 	
 	public Entity() {
+		this.ID = statID++;
 		props.put(PropertyName.AC ,new Skill(this, PropertyName.AC) );
 		props.put(PropertyName.STR,new Skill(this, PropertyName.STR));
 		props.put(PropertyName.DEX,new Skill(this, PropertyName.DEX));
