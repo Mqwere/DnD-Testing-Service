@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 import Enums.Core.DNDClass;
+import Enums.Core.Enhancement;
 import Enums.Core.ImmunityType;
 import Enums.Core.Race;
 import Enums.Core.SaveState;
@@ -14,7 +15,10 @@ import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
+import Support.DamagePackage;
 import Support.EntityRegister;
+import Support.Skill;
+import UI.ClassWindow;
 import UI.MainWindow;
 
 public class Program {
@@ -73,7 +77,7 @@ public class Program {
 			lineNo++;
 			if(line.length()>0) {
 				Program.log(line);
-				if(line.charAt(0) == SaveState.CCOPEN.startSign) {
+				if(line.length()==1 && line.charAt(0) == SaveState.CCOPEN.startSign) {
 					if(tempE!=null) {
 						tempE.setWeapon(tempW);
 						EntityRegister.put(tempE.color,tempE);
@@ -83,14 +87,19 @@ public class Program {
 					incrementer = 0;
 				}
 				else
-				if(line.charAt(0) == SaveState.WEPOPEN.startSign) {
+				if(line.length()==1 && line.charAt(0) == SaveState.WEPOPEN.startSign) {
 					currSS = SaveState.WEPOPEN;
 					tempW = new Weapon();
 					incrementer = 0;
 				}
 				else
-				if(line.charAt(0) == SaveState.DMGOPEN.startSign) {
+				if(line.length()==1 && line.charAt(0) == SaveState.DMGOPEN.startSign) {
 					currSS = SaveState.DMGOPEN;
+					incrementer = 0;
+				}
+				else
+				if(line.length()==1 && line.charAt(0) == SaveState.CLOPEN.startSign) {
+					currSS = SaveState.CLOPEN;
 					incrementer = 0;
 				}
 				else {
@@ -265,7 +274,19 @@ public class Program {
 							if(line.equals("finesse")) tempW.setWpType(WeaponType.FINESSE);
 							else 				tempW.setWpType(WeaponType.NORMAL);
 						break;
+						case 4:
+								 if(line.charAt(4)=='0') tempW.setEnhancement(Enhancement.plus0);
+							else if(line.charAt(4)=='1') tempW.setEnhancement(Enhancement.plus1);
+							else if(line.charAt(4)=='2') tempW.setEnhancement(Enhancement.plus2);
+							else if(line.charAt(4)=='3') tempW.setEnhancement(Enhancement.plus3);
+							else Program.error("Core.Program.saveToEntityList.WEPOPEN.(case 4): Enhancement failed to parse.");
 						}
+						break;
+					case CLOPEN:
+						String[] subline = line.split(" ");
+						for(DNDClass dc: DNDClass.values())
+							if (subline[0].equals(dc.toString()))
+								tempE.setClass(dc, Integer.parseInt(subline[1]));
 						break;
 					default:
 						break;
@@ -280,6 +301,14 @@ public class Program {
 			}
 		}
 	}
+	
+	/*
+	 * 	plus0(0),
+		plus1(1),
+		plus2(2),
+		plus3(3)
+	;
+	 */
 	
 	public static String getSaveFile() {
 		for(TeamColor tm: TeamColor.values()) {
@@ -301,11 +330,9 @@ public class Program {
 	}
 
 	public static void main(String[] args) {
-		Program.mainWindow = new MainWindow();
-				
-		//String input = new String("Well, let just see if that\n could possibly work with this\n static function I just made.");
-		//Program.log(input+"\n\n "+input+"\n");
-		//Program.log(TextEditor.htmlize(input+"\n "+input));
+		//Program.mainWindow = new MainWindow();
+		
+		new ClassWindow(10);
 		
 		//Program.print(Entity.customChara().toString());
 	}

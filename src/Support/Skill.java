@@ -1,5 +1,7 @@
 package Support;
 
+import java.util.ArrayList;
+
 import Core.Entity;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
@@ -10,6 +12,14 @@ public class Skill{
 	public int modifier;
 	public boolean profficiency = false;
 	PropertyName  name;
+	
+	public static int rollSkill() {
+		ArrayList<Integer> array = new ArrayList<>();
+		for(int i=0;i<4;i++) array.add(Roller.roll(Die.D6));
+		array.sort((Integer x, Integer y)-> y.intValue()-x.intValue()); /// 4d6 ditch worst
+		//array.sort((Integer x, Integer y)-> x.intValue()-y.intValue()); /// 4d6 ditch best
+		return array.get(0)+array.get(1)+array.get(2);
+	}
 	
 	public Skill(Entity master,PropertyName name){
 		this.name = name;

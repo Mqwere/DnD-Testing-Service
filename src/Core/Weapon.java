@@ -125,6 +125,7 @@ public class Weapon {
 			case FINESSE: output += "\nfinesse"; break;
 			default: 	  output += "\nnormal";  break;			
 		}
+		output +="\n"+this.getEnhancement().toString();
 		
 		for(Map.Entry<Integer, Integer> entry: values.entrySet()) {
 			output +="\n>";

@@ -70,4 +70,25 @@ public class TextEditor {
 		return output;
 	}
 	
+	public static String leaveNumbers(String input) {
+		String internal = new String("");
+		for(int i=0; i<input.length();i++) {
+			if(input.charAt(i)>='0'&&input.charAt(i)<='9') {
+				internal += input.charAt(i);
+			}
+		}
+		return internal;
+	}
+	
+	public static Integer tryParse(String input) {
+		Integer output;
+		try {
+			output = Integer.parseInt(input);
+		}
+		catch(Exception e){
+			input  = leaveNumbers(input);
+			output = Integer.parseInt(input);
+		}
+		return output;
+	}
 }

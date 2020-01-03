@@ -29,6 +29,7 @@ Sword
 1
 true
 normal
+plus0
 >
 1
 8
@@ -64,6 +65,7 @@ Staff
 2
 true
 normal
+plus0
 >
 1
 8
@@ -99,6 +101,7 @@ Longbow
 0
 true
 finesse
+plus0
 >
 1
 10
@@ -134,6 +137,7 @@ Staff
 2
 true
 normal
+plus0
 >
 1
 8

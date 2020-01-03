@@ -14,6 +14,7 @@ import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
 import Support.DClass;
+import Support.DamagePackage;
 import Support.Skill;
 
 public class Entity{
@@ -78,17 +79,20 @@ public class Entity{
 
 	
 	public static Entity customChara() {
-		Entity ent = new Entity(Race.CUSTOM, "Dummy", 10, 100, 10, 14, 10, 16, 4, 4 ,4);
+		Entity ent = new Entity(Race.CUSTOM, "Dave", 10, 100, 10, 14, 10, 16, 4, 4 ,4);
 		ent.setClass(DNDClass.FIGHTER,new DClass(6,true));
 		ent.setClass(DNDClass.BARBARIAN,3);
 		ent.setClass(DNDClass.MONK,1);
-		Weapon wep = new Weapon("Poopin' Stick",WeaponType.NORMAL);
-		wep.setDmType(DamageType.BLUD);
-		wep.addDmg(1, Die.D6, DamageType.BLUD);
-		wep.addDmg(2, Die.D4, DamageType.POIS);
-		wep.addDmg(1, Die.D4, DamageType.PSYC);
-		wep.setProfficient(true);
-		wep.setEnhancement(Enhancement.plus1);
+		ArrayList<DamagePackage> dmgPck = new ArrayList<DamagePackage>();
+		dmgPck.add(new DamagePackage(2,Die.D4,DamageType.SLAS));
+		dmgPck.add(new DamagePackage(1,Die.D4,DamageType.FIRE));
+		dmgPck.add(new DamagePackage(1,Die.D4,DamageType.ACID));
+		dmgPck.add(new DamagePackage(1,Die.D4,DamageType.RADI));
+		dmgPck.add(new DamagePackage(1,Die.D4,DamageType.PSYC));
+		Weapon wep = new Weapon("Sord", WeaponType.NORMAL,dmgPck);
+		wep.setEnhancement(Enhancement.plus3);
+		wep.setDmType(DamageType.SLAS);
+		
 		ent.setWeapon(wep);
 		ent.realizeTheClasses();
 		return ent;
@@ -437,7 +441,6 @@ public class Entity{
 		}
 	}
 	
-
 	public String toString() {
 		String output = new String();
 		output += "=\n";
@@ -454,6 +457,7 @@ public class Entity{
         output += this.props.get(PropertyName.CHR).value;
 		for(DamageType dmg: DamageType.values()) {output +="\n"+resistanceMap.get(dmg);}
 		output +="\n" + this.color;
+		output +="\n%";
 		for(DNDClass cl: classMap.keySet()) {output +="\n"+cl+" "+classMap.get(cl).toString();}
 		output +="\n" + this.weapon.toString();
 		return output;

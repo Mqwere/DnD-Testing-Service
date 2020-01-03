@@ -41,7 +41,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	/// ENCINIT UI
 	
 	public MainWindow() {
-		super(240, 540, true);
+		super(240, 420, true);
 		this.setTitle("DnD Testing Service");
 
 		newButton	.addActionListener(this);
