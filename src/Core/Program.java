@@ -3,6 +3,10 @@ package Core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
+import Enums.Core.DNDClass;
+import Enums.Core.Enhancement;
 import Enums.Core.ImmunityType;
 import Enums.Core.Race;
 import Enums.Core.SaveState;
@@ -10,12 +14,36 @@ import Enums.Core.TeamColor;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
+import Enums.Support.PropertyName;
+import Support.DamagePackage;
 import Support.EntityRegister;
+import Support.Skill;
+import UI.ClassWindow;
 import UI.MainWindow;
 
 public class Program {
 	
 	public static MainWindow mainWindow;
+
+	public static String save = new String();
+	
+	public static void error(Object message) {
+		String output = new String();
+		if(message.getClass() == String.class) {
+			String obj = (String)message;
+			output = obj;
+		}
+		else
+		if(message.getClass() == Boolean.class) {
+			Boolean obj = (Boolean) message;
+			output = Boolean.toString(obj);
+		}
+		else {
+			output = message.toString();
+		}
+		
+		JOptionPane.showMessageDialog(Program.mainWindow, output);
+	}
 	
 	public static void print(Object message) {
 		if(message.getClass() == String.class) {
@@ -36,8 +64,6 @@ public class Program {
 		Program.print("\n "+message);
 	}
 	
-	public static String save = new String();
-	
 	public static void saveToEntityList() {
 		String[]   input = save.split("\n");
 		SaveState  currSS = null;
@@ -46,32 +72,34 @@ public class Program {
 		Weapon	   tempW = new Weapon();
 		int		   tempI = 0;
 		Die		   tempD = null;
-		DamageType tempDT = null;
 		
 		for(String line: input) {
 			lineNo++;
 			if(line.length()>0) {
 				Program.log(line);
-				if(line.charAt(0) == SaveState.CCOPEN.startSign) {
+				if(line.length()==1 && line.charAt(0) == SaveState.CCOPEN.startSign) {
 					if(tempE!=null) {
 						tempE.setWeapon(tempW);
 						EntityRegister.put(tempE.color,tempE);
-						//Program.log("tempE.color: "+tempE.color);
-						Program.log("EntityRegister"+tempE.color+" map size: "+EntityRegister.getMap(tempE.color).size());
 					}
 					currSS = SaveState.CCOPEN;
 					tempE = new Entity();
 					incrementer = 0;
 				}
 				else
-				if(line.charAt(0) == SaveState.WEPOPEN.startSign) {
+				if(line.length()==1 && line.charAt(0) == SaveState.WEPOPEN.startSign) {
 					currSS = SaveState.WEPOPEN;
 					tempW = new Weapon();
 					incrementer = 0;
 				}
 				else
-				if(line.charAt(0) == SaveState.DMGOPEN.startSign) {
+				if(line.length()==1 && line.charAt(0) == SaveState.DMGOPEN.startSign) {
 					currSS = SaveState.DMGOPEN;
+					incrementer = 0;
+				}
+				else
+				if(line.length()==1 && line.charAt(0) == SaveState.CLOPEN.startSign) {
+					currSS = SaveState.CLOPEN;
 					incrementer = 0;
 				}
 				else {
@@ -89,115 +117,128 @@ public class Program {
 								}
 							}	
 							if(tempE.race == null) {
-								Program.log("STELL ERROR: Race null, line: "+line+"\n");
+								Program.error("Program.saveToEntityList.CCOPEN: Race null, line: "+line+"\n");
 								tempE.race = Race.CUSTOM;
 							}
 							} catch(Exception e) {
-								Program.log("Program.saveToEntityList.CCOPEN: "+e.getMessage());
+								Program.error("Program.saveToEntityList.CCOPEN: "+e.getMessage());
 							}break;
 						case  2:	tempE.level 	 = Integer.parseInt(line);	break;
 						case  3:	tempE.maxHP 	 = Integer.parseInt(line);  break;
-						case  4:	tempE.armorClass = Integer.parseInt(line);  break;
-						case  5:	tempE.STR.setValue(Integer.parseInt(line)); if(tempE.STR.value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
-						case  6:	tempE.DEX.setValue(Integer.parseInt(line)); if(tempE.DEX.value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
-						case  7:	tempE.CON.setValue(Integer.parseInt(line)); if(tempE.CON.value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
-						case  8:	tempE.INT.setValue(Integer.parseInt(line)); if(tempE.INT.value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
-						case  9:	tempE.WIS.setValue(Integer.parseInt(line)); if(tempE.WIS.value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
-						case 10:	tempE.CHR.setValue(Integer.parseInt(line)); if(tempE.CHR.value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
+						case  4:	tempE.props.get(PropertyName.AC ).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.AC ).value == 0) 		Program.log("STEL ERROR: AC  NULL"); break;
+					    case  5:	tempE.props.get(PropertyName.STR).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.STR).value == 0) 		Program.log("STEL ERROR: STR NULL"); break;
+						case  6:	tempE.props.get(PropertyName.DEX).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.DEX).value == 0) 		Program.log("STEL ERROR: DEX NULL"); break;
+						case  7:	tempE.props.get(PropertyName.CON).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.CON).value == 0) 		Program.log("STEL ERROR: CON NULL"); break;
+						case  8:	tempE.props.get(PropertyName.INT).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.INT).value == 0) 		Program.log("STEL ERROR: INT NULL"); break;
+						case  9:	tempE.props.get(PropertyName.WIS).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.WIS).value == 0) 		Program.log("STEL ERROR: WIS NULL"); break;
+						case 10:	tempE.props.get(PropertyName.CHR).setValue(Integer.parseInt(line)); if(tempE.props.get(PropertyName.CHR).value == 0) 		Program.log("STEL ERROR: CHR NULL"); break;
 						case 11: 
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.PIER,it);	break;
 						case 12:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.SLAS,it);	break;
 						case 13:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.BLUD,it);	break;
 						case 14:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.ACID,it);	break;
 						case 15:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.COLD,it);	break;
 						case 16:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.FIRE,it);	break;
 						case 17:
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;	
 							tempE.setResistance(DamageType.FORC,it);	break;
 						case 18:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.LIGH,it);	break;
 						case 19:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.NECR,it);	break;
 						case 20:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.POIS,it);	break;
 						case 21:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.PSYC,it);	break;
 						case 22:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.RADI,it);	break;
 						case 23:	
-							if(line=="VULNERABLE") it = ImmunityType.VULNERABLE;
-							else if(line=="NONE")  it = ImmunityType.NONE;
-							else if(line=="RESISTANT") it = ImmunityType.RESISTANT;
-							else if(line=="IMMUNE") it = ImmunityType.IMMUNE;
+							if(line.equals("VULNERABLE")) it = ImmunityType.VULNERABLE;
+							else if(line.equals("NONE"))  it = ImmunityType.NONE;
+							else if(line.equals("RESISTANT")) it = ImmunityType.RESISTANT;
+							else if(line.equals("IMMUNE")) it = ImmunityType.IMMUNE;
 							else  it = ImmunityType.NONE;
 							tempE.setResistance(DamageType.THUN,it);	break;
 						case 24:
-							if(line=="RED") tempE.color = TeamColor.RED;
-							else 			tempE.color = TeamColor.BLUE;
+							if(line.equals("RED")) tempE.color = TeamColor.RED;
+							else if (line.equals("BLUE")) tempE.color = TeamColor.BLUE;
+							else {
+								Program.error("Team is NULL for some reason: '"+line+"'");
+								tempE = null;
+								return;
+							}
+							break;							
+						default:
+							String[] subline = line.split(" ");
+							if(subline.length>1)
+							for(DNDClass cl: DNDClass.values()) {
+								if(subline[0].equals(cl.toString())) tempE.setClass(cl, Integer.parseInt(subline[1]));
+								if(subline.length>2) tempE.classMap.get(cl).isPrimary = true;
+							}
 							break;
 						}
 						break;
@@ -206,17 +247,12 @@ public class Program {
 						case 0: tempI = Integer.parseInt(line);	 break;
 						case 1:	
 							for(Die d: Die.values()) {
-								if(d.value == Integer.parseInt(line)) {
-									tempD = d;
-								}
+								if(d.value == Integer.parseInt(line)) tempD = d;
 							}
 						break;
 						case 2:	 
 							for(DamageType dt: DamageType.values()) {
-								if(dt.arrValue == Integer.parseInt(line)) {
-									tempDT = dt;
-									tempW.addDmg(tempI, tempD, tempDT);
-								}
+								if(dt.arrValue == Integer.parseInt(line)) tempW.addDmg(tempI, tempD, dt);
 							}
 						break;
 						}
@@ -228,19 +264,29 @@ public class Program {
 						break;
 						case 1:	
 							for(DamageType dt: DamageType.values()) {
-								if(dt.arrValue == Integer.parseInt(line)) {
-									tempW.setDmType(dt);
-								}
+								if(dt.arrValue == Integer.parseInt(line)) tempW.setDmType(dt);
 							}
 						break;
 						case 2:	 
 							tempW.setProfficient(Boolean.parseBoolean(line));
 						break;
 						case 3:	 
-							if(line=="finesse") tempW.setWpType(WeaponType.FINESSE);
+							if(line.equals("finesse")) tempW.setWpType(WeaponType.FINESSE);
 							else 				tempW.setWpType(WeaponType.NORMAL);
 						break;
+						case 4:
+								 if(line.charAt(4)=='0') tempW.setEnhancement(Enhancement.plus0);
+							else if(line.charAt(4)=='1') tempW.setEnhancement(Enhancement.plus1);
+							else if(line.charAt(4)=='2') tempW.setEnhancement(Enhancement.plus2);
+							else if(line.charAt(4)=='3') tempW.setEnhancement(Enhancement.plus3);
+							else Program.error("Core.Program.saveToEntityList.WEPOPEN.(case 4): Enhancement failed to parse.");
 						}
+						break;
+					case CLOPEN:
+						String[] subline = line.split(" ");
+						for(DNDClass dc: DNDClass.values())
+							if (subline[0].equals(dc.toString()))
+								tempE.setClass(dc, Integer.parseInt(subline[1]));
 						break;
 					default:
 						break;
@@ -256,6 +302,14 @@ public class Program {
 		}
 	}
 	
+	/*
+	 * 	plus0(0),
+		plus1(1),
+		plus2(2),
+		plus3(3)
+	;
+	 */
+	
 	public static String getSaveFile() {
 		for(TeamColor tm: TeamColor.values()) {
 			HashMap<Integer, Entity> temp = EntityRegister.getMap(tm);
@@ -270,15 +324,17 @@ public class Program {
 	
 	public static void setCurrentStatus(ArrayList<Byte> array) {
 		String boop = new String();
-		for(Byte b: array) {
+		for(Byte b: array)
 			boop += (char)Byte.toUnsignedInt(b);
-		}
 		Program.save = boop;
 	}
 
 	public static void main(String[] args) {
-		Program.mainWindow = new MainWindow();
-		//new CCWindow();
+		//Program.mainWindow = new MainWindow();
+		
+		new ClassWindow(10);
+		
+		//Program.print(Entity.customChara().toString());
 	}
 
 }

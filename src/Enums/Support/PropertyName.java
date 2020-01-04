@@ -1,7 +1,8 @@
 package Enums.Support;
 
 
-public enum SkillName {
+public enum PropertyName {
+	AC ,
 	STR,
 	DEX,
 	CON,

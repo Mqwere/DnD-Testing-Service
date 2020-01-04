@@ -1,0 +1,42 @@
+package Enums.Core;
+
+public enum EffectEffect {
+	currHP,
+	maxHP,
+	armorClass,
+	
+	STR,
+	DEX,
+	CON,
+	INT,
+	WIS,
+	CHR,
+	
+    PIER_RES,
+	SLAS_RES,
+	BLUD_RES,
+	ACID_RES,
+	COLD_RES,
+	FIRE_RES,
+	FORC_RES,
+	LIGH_RES,
+	NECR_RES,
+	POIS_RES,
+	PSYC_RES,
+	RADI_RES,
+	THUN_RES,
+
+    PIER_DMG,
+	SLAS_DMG,
+	BLUD_DMG,
+	ACID_DMG,
+	COLD_DMG,
+	FIRE_DMG,
+	FORC_DMG,
+	LIGH_DMG,
+	NECR_DMG,
+	POIS_DMG,
+	PSYC_DMG,
+	RADI_DMG,
+	THUN_DMG,
+}

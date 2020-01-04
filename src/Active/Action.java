@@ -3,7 +3,7 @@ package Active;
 import Core.Entity;
 import Enums.Active.ActionType;
 
-public abstract class Action {
+public class Action {
 	String 		name;
 	Boolean 	isMagical;
 	ActionType 	type;

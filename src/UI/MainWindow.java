@@ -19,6 +19,7 @@ import Enums.Core.Race;
 import Enums.Core.TeamColor;
 import Enums.UI.WindowState;
 import Support.EntityRegister;
+import Support.TextEditor;
 
 public class MainWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -26,29 +27,32 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	WindowState state;
 		
 	/// INIT UI
-	JButton newButton 	= new JButton("New  Simulation");
-	JButton loadButton 	= new JButton("Load Simulation");
-	JButton exitButton	= new JButton("Exit");
+	JButton newButton 	 = new JButton("New  Simulation");
+	JButton loadButton 	 = new JButton("Load Simulation");
+	JButton exitButton	 = new JButton("Exit");
 	
 	/// ENCSET UI
-	TeamPanel blue_team = new TeamPanel	("Blue team", TeamColor.BLUE);
-	TeamPanel red_team  = new TeamPanel	("Red  team", TeamColor.RED );
-	JButton   saveButton= new JButton	("Save Simulation");
-	JButton	  backButton= new JButton	("Back");
+	TeamPanel blue_team  = new TeamPanel(TextEditor.htmlize("Blue team",5), TeamColor.BLUE);
+	TeamPanel red_team   = new TeamPanel(TextEditor.htmlize("Red  team",5), TeamColor.RED );
+	JButton   startButton= new JButton	(TextEditor.htmlize("Start Simulation",4));
+	JButton   saveButton = new JButton	(TextEditor.htmlize("Save\nSimulation",true, 4));
+	JButton	  backButton = new JButton	(TextEditor.htmlize("Back",4));
 	
 	/// ENCINIT UI
 	
 	public MainWindow() {
-		super(240, 540, true);
+		super(240, 420, true);
 		this.setTitle("DnD Testing Service");
 
 		newButton	.addActionListener(this);
+		startButton .addActionListener(this);
 		loadButton	.addActionListener(this);
 		saveButton	.addActionListener(this);
 		exitButton	.addActionListener(this);
 		backButton	.addActionListener(this);  
 		
 		this.panel.add(newButton );
+		this.panel.add(startButton);
 		this.panel.add(saveButton);
 		this.panel.add(loadButton);
 		this.panel.add(exitButton);
@@ -56,10 +60,6 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		this.panel.add(red_team  );
 		this.panel.add(backButton);
 		setState(WindowState.INIT);
-	}
-	
-	public	void createCharacter(CharacterRecord record, TeamPanel panel) {
-		
 	}
 	
 	private void setState(WindowState state) {
@@ -76,7 +76,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	    			break;
 	    		
 	    	case ENCSET:
-	    		setSize(570, 460);
+	    		setSize(570, 680);
 	    		blue_team	.clear();
 	    		red_team	.clear(); 
 	    		newButton	.setVisible(false);
@@ -86,10 +86,11 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	    		blue_team	.setVisible(true );
 	    		red_team 	.setVisible(true );
 	    		backButton 	.setVisible(true );
-	    		blue_team	.setBounds( 20, 20,250,280);
-	    		red_team 	.setBounds(290, 20,250,280);
-	    		backButton	.setBounds( 20,320,250, 80);
-	    		saveButton	.setBounds(290,320,250, 80);
+	    		blue_team	.setBounds( 20, 20,250,500);
+	    		red_team 	.setBounds(290, 20,250,500);
+	    		backButton	.setBounds( 20,540,180, 80);
+	    		saveButton	.setBounds(220,540,120, 80);
+	    		startButton .setBounds(360,540,180, 80);
 	    			break;
 	    		
 	    	case INIT:
@@ -131,13 +132,11 @@ public class MainWindow extends DNDWindow implements ActionListener{
 					HashMap<Integer, Entity> temp = EntityRegister.getMap(tm);
 					if(temp!=null) {
 						for(Integer i: temp.keySet()) {
-							Program.log(i);
-							if(tm == TeamColor.BLUE) {
+							//Program.log(i);
+							if(tm == TeamColor.BLUE)
 								this.blue_team.updateTheLook(i, temp.get(i));
-							}
-							else {
+							else 
 								this.red_team .updateTheLook(i, temp.get(i));
-							}
 						}
 					}
 				}
@@ -158,6 +157,8 @@ public class MainWindow extends DNDWindow implements ActionListener{
 class CharacterRecord extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
+	public int ID;
+	
 	JLabel	name = new JLabel ("");
 	JLabel	race = new JLabel ("");
 	JLabel	lvl  = new JLabel ("");
@@ -168,7 +169,13 @@ class CharacterRecord extends JPanel{
 		this("TEST", Race.HUMAN, 1);
 	}
 	
+	public CharacterRecord(Entity ent) {
+		this(ent.getName(),ent.getRace(), ent.getLvL());
+		this.ID = ent.ID;
+	}
+	
 	public CharacterRecord(String name, Race race, int lvl) {
+		this.ID = Entity.statID;
 		this.setBackground(new Color(200,200,200));
 		this.name.setText(name);
 		this.race.setText(race.toString());
@@ -178,18 +185,7 @@ class CharacterRecord extends JPanel{
 		this.add(this.lvl );
 		this.add(this.dlte);
 		this.add(this.edit);
-	}
-	
-	public CharacterRecord(Entity ent) {
-		this.setBackground(new Color(200,200,200));
-		this.name.setText(ent.getName());
-		this.race.setText(ent.getRace().toString());
-		this.lvl.setText (" lvl "+Integer.toString(ent.getLvL()));
-		this.add(this.name);
-		this.add(this.race);
-		this.add(this.lvl );
-		this.add(this.dlte);
-		this.add(this.edit);
+		/// id
 	}
 	
 	@Override
@@ -203,9 +199,9 @@ class CharacterRecord extends JPanel{
 		tempX+= race.getBounds().width;
 		this.lvl .setBounds(tempX, tempY, (bond.width*30)/100, (bond.height*35)/100);
 		tempY = bond.height/10;
-		this.dlte.setBounds(tempX + bond.width/6, tempY, tempY*11 , tempY*9);
-		tempX += tempY*11;
-		this.edit.setBounds(tempX + bond.width/6, tempY, tempY*11 , tempY*9);
+		this.dlte.setBounds(tempX + bond.width/6, tempY, (int)(bond.width/(5.3)) , (int)(tempY*8.8));
+		tempX += tempY*12;
+		this.edit.setBounds(tempX + bond.width/6, tempY, (int)(bond.width/(5.3)) , (int)(tempY*8.8));
 	}
 }
 
@@ -215,7 +211,7 @@ class TeamPanel extends JPanel implements ActionListener{
 	JLabel	title	  = new JLabel();
 	List<CharacterRecord> 
 			records   = new ArrayList<>();
-	JButton addRecord = new JButton("+");
+	JButton addRecord = new JButton(TextEditor.htmlize("+",6));
 	
 	public TeamPanel(String title, TeamColor color) {
 		this.setBackground(new Color(180,180,180));
@@ -234,10 +230,19 @@ class TeamPanel extends JPanel implements ActionListener{
 		this.records.clear();
 	}
 	
+	private void sortRecords() {
+		List<CharacterRecord> temp   = new ArrayList<>();
+		for(Integer i: EntityRegister.getMap(this.color).keySet())
+			for(int j=0; j<records.size();j++) {
+				if(EntityRegister.getMap(this.color).get(i).ID == records.get(j).ID) temp.add(records.get(j));
+			}
+		this.records = new ArrayList<CharacterRecord>(temp);
+	}
+	
 	@Override
 	public void setBounds(int x, int y, int w, int h) {
 		Rectangle bond = new Rectangle(x,y,w,h);
-		int tempX = bond.width/10, tempY = bond.height/10;
+		int tempX = bond.width/10, tempY = bond.height/18;
 		super.setBounds(x, y, w, h);
 		this.title		.setBounds(tempX*3, tempY/2, tempX*4, (tempY*3)/2);
 		this.addRecord	.setBounds(tempX/2, tempY*2, tempX*9, (tempY*3)/2);
@@ -245,7 +250,8 @@ class TeamPanel extends JPanel implements ActionListener{
 	
 	private void updateTheLook() {
 		Rectangle bond = this.getBounds();
-		int tempX = bond.width/10, tempY = bond.height/10;
+		int tempX = bond.width/10, tempY = bond.height/18;
+		this.sortRecords();
 		for(int i = 0; i<records.size();i++){
 			records.get(i).setLayout(null);
 			records.get(i).setBounds(tempX/2, tempY*(2+i*2), tempX*9, (tempY*3)/2);
@@ -254,7 +260,7 @@ class TeamPanel extends JPanel implements ActionListener{
 		if(this.records.size()==0) this.addRecord.setBounds(tempX/2, tempY*2, tempX*9, (tempY*3)/2);
 		else { 
 			Rectangle temp = records.get(records.size()-1).getBounds();
-			if(this.records.size()<4) 	this.addRecord.setBounds(tempX/2, temp.y+tempY*2, tempX*9, (tempY*3)/2);
+			if(this.records.size()<8) 	this.addRecord.setBounds(tempX/2, temp.y+tempY*2, tempX*9, (tempY*3)/2);
 			else 						this.addRecord.setBounds(tempX/2, temp.y+tempY*2, tempX*6, 0);
 		}
 		this.repaint();
@@ -262,9 +268,9 @@ class TeamPanel extends JPanel implements ActionListener{
 	
 	public void updateTheLook(int index, Entity ent) {
 		CharacterRecord record = new CharacterRecord(ent);
-		CharacterRecord temp   = this.records.size()<=index? null:this.records.get(index);
-		this.records.add(record);
+		CharacterRecord temp   = this.records.size()<=index? null:/**/this.records.get(index);
 		if(temp!=null)	this.remove(temp);
+		this.records.add(record);
 		this.add(record );
 		record.dlte.addActionListener(this);
 		record.edit.addActionListener(this);
@@ -284,7 +290,7 @@ class TeamPanel extends JPanel implements ActionListener{
 		Object source = event.getSource();
 		
 		if(source == addRecord) {
-			if(this.records.size()<4) new CCWindow(Program.mainWindow,this.color,this.records.size());
+			if(this.records.size()<8) new CCWindow(Program.mainWindow,this.color,this.records.size());
 		}
 		else {
 			if(this.records.size()>0) {
@@ -292,12 +298,15 @@ class TeamPanel extends JPanel implements ActionListener{
 					if(source == records.get(i).dlte) {
 						this.remove(records.get(i));
 						EntityRegister.rem(this.color, i);
-						records.remove(i);
+						this.records.remove(i);
 						updateTheLook();
 					}
 					else 
 					if(source == records.get(i).edit) {
 						new CCWindow(Program.mainWindow, this.color, i, EntityRegister.get(this.color, i));
+						this.remove(records.get(i));
+						EntityRegister.rem(this.color, i);
+						this.records.remove(i);
 						//Program.log("NOT YET IMPLEMENTED");
 					}
 				}

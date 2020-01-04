@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import Core.Entity;
 import Core.Weapon;
+import Enums.Core.DNDClass;
 import Enums.Core.Enhancement;
 import Enums.Core.ImmunityType;
 import Enums.Core.Race;
@@ -23,18 +24,26 @@ import Enums.Core.TeamColor;
 import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
+import Enums.Support.PropertyName;
 import Support.DamagePackage;
 import Support.EntityRegister;
+import Support.TextEditor;
 
 public class CCWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	
 	MainWindow 	parent;
 	StatPanel 	statPanel= new StatPanel  (this);
-	ResPanel  	resPanel = new ResPanel	  ( );
+	ResPanel  	resPanel = new ResPanel	  (	);
 	WeaponPanel wepPanel = new WeaponPanel("Main weapon");
+	JButton		classw	 = new JButton	  ("Class Window");
+	JButton		skillw	 = new JButton	  ("Skill Window");
 	JButton		affirm	 = new JButton	  ("Save");
 	JButton		cancel	 = new JButton	  ("Cancel");
+	
+	JComboBox<DNDClass>	
+				classBox = new JComboBox<>(DNDClass.values());
+	JButton		roll	 = new JButton	  (TextEditor.htmlize("Roll",2));
 	
 	Boolean		edit 	 = false;
 	
@@ -42,7 +51,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 	Integer		cint;
 	
 	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint) {
-		super(995, 540, false);
+		super(995, 580, false);
 		this.setTitle("DnD Character Creation");
 		this.parent = parent;
 		this.ccolor = ccolor;
@@ -54,7 +63,18 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.panel.add(resPanel );
 		this.panel.add(wepPanel );
 		this.panel.add(affirm	);
-		this.panel.add(cancel	);		
+		this.panel.add(cancel	);
+
+		this.panel.add(classw);
+		this.panel.add(skillw);
+		this.panel.add(classBox);
+		this.panel.add(roll);
+		
+		this.classBox.setSelectedItem(DNDClass.FIGHTER);
+		
+		classw.addActionListener(this);
+		skillw.addActionListener(this);
+		roll  .addActionListener(this);
 		affirm.addActionListener(this);
 		cancel.addActionListener(this);
 		
@@ -70,12 +90,12 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.statPanel.hpField	.setText(Integer.toString(ent.getHP()));
 		this.statPanel.lvlChoice.setSelectedItem(ent.getLvL());
 		this.statPanel.raceBox	.setSelectedItem(ent.getRace());
-		this.statPanel.STRBox	.setSelectedItem(ent.STR.value);
-		this.statPanel.DEXBox	.setSelectedItem(ent.DEX.value);
-		this.statPanel.CONBox	.setSelectedItem(ent.CON.value);
-		this.statPanel.INTBox	.setSelectedItem(ent.INT.value);
-		this.statPanel.WISBox	.setSelectedItem(ent.WIS.value);
-		this.statPanel.CHRBox	.setSelectedItem(ent.CHR.value);
+		this.statPanel.STRBox	.setSelectedItem(ent.getSkillV(PropertyName.STR));
+		this.statPanel.DEXBox	.setSelectedItem(ent.getSkillV(PropertyName.DEX));
+		this.statPanel.CONBox	.setSelectedItem(ent.getSkillV(PropertyName.CON));
+		this.statPanel.INTBox	.setSelectedItem(ent.getSkillV(PropertyName.INT));
+		this.statPanel.WISBox	.setSelectedItem(ent.getSkillV(PropertyName.WIS));
+		this.statPanel.CHRBox	.setSelectedItem(ent.getSkillV(PropertyName.CHR));
 		/// ===================
 		this.resPanel.PIERbox.setSelectedItem(ent.getResistance(DamageType.PIER));
 		this.resPanel.SLASbox.setSelectedItem(ent.getResistance(DamageType.SLAS));
@@ -96,17 +116,21 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.wepPanel.profBox	.setSelected	(tmp.getProfficient());
 		this.wepPanel.enhancBox	.setSelectedItem(tmp.getEnhancement());
 		this.wepPanel.wtBox		.setSelectedItem(tmp.getWpType());
-		for(DamagePackage dp: tmp.damage) {
+		for(DamagePackage dp: tmp.damage)
 			this.wepPanel.updateTheLook(new WeaponRecord(dp.dmgType,dp.dieNo,dp.dieSize));
-		}
 	}
 	
 	private void setContent() {
-		statPanel.setBounds( 20, 20,300,440);
-		resPanel .setBounds(340, 20,300,440);
-		wepPanel .setBounds(660, 20,300,180);
-		affirm	 .setBounds(680,430,110, 30);
-		cancel	 .setBounds(810,430,110, 30);
+		statPanel.setBounds( 20, 60,300,440);
+		resPanel .setBounds(340, 60,300,440);
+		wepPanel .setBounds(660, 60,300,180);
+		affirm	 .setBounds(680,470,110, 30);
+		cancel	 .setBounds(810,470,110, 30);
+
+		classBox .setBounds( 20, 15,240, 30);
+		roll	 .setBounds(270, 15, 50, 30);
+		classw	 .setBounds(340, 15,300, 30);
+		skillw	 .setBounds(660, 15,300, 30);
 	}
 
 	@Override
@@ -117,8 +141,8 @@ public class CCWindow extends DNDWindow implements ActionListener{
 				(Race)this.statPanel.raceBox.getSelectedItem(),
 				this.statPanel.nameField.getText(),
 				this.statPanel.lvlChoice.getItemAt(this.statPanel.lvlChoice.getSelectedIndex()),
-				Integer.parseInt(this.statPanel.hpField.getText()),
-				Integer.parseInt(this.statPanel.acField.getText()),
+				TextEditor.tryParse(this.statPanel.hpField.getText()),
+				TextEditor.tryParse(this.statPanel.acField.getText()),
 				this.statPanel.STRBox.getItemAt(this.statPanel.STRBox.getSelectedIndex()),
 				this.statPanel.DEXBox.getItemAt(this.statPanel.DEXBox.getSelectedIndex()),
 				this.statPanel.CONBox.getItemAt(this.statPanel.CONBox.getSelectedIndex()),
@@ -160,20 +184,20 @@ public class CCWindow extends DNDWindow implements ActionListener{
 			putout.setProfficient(this.wepPanel.profBox.isSelected());
 			output.setWeapon(putout);
 			
-			if(!this.edit)	{
-				if(this.ccolor == TeamColor.BLUE) 
-					 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
-				else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
+			//if(!this.edit)	{
+			EntityRegister.put(this.ccolor, output);
+			if(this.ccolor == TeamColor.BLUE) 
+				 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
+			else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
 				
-				EntityRegister.put(this.ccolor, output);
-			}
-			else {
+			//}
+			/*else {
 				if(this.ccolor == TeamColor.BLUE) 
 					 this.parent.blue_team	.updateTheLook(cint,output);
 				else this.parent.red_team	.updateTheLook(cint,output);
 				
 				EntityRegister.put(this.ccolor, cint, output);
-			}	
+			}	*/
 			
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
@@ -181,8 +205,19 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		if(cancel == source) {
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
+		else
+		if(classw == source) {
+			
+		}
+		else
+		if(skillw == source) {
+			
+		}
+		else
+		if(roll == source) {
+			
+		}
 	}
-
 }
 
 class StatPanel extends JPanel implements ActionListener{
@@ -210,9 +245,9 @@ class StatPanel extends JPanel implements ActionListener{
 	JTextField acField	= new JTextField("10");
 	Integer[] lvlPoss 	= {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}; 
 	JComboBox<Integer> 
-		lvlChoice		= new JComboBox<Integer>(lvlPoss);
+			lvlChoice	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Race> 
-		raceBox 		= new JComboBox<Race>(Race.values());
+			raceBox 	= new JComboBox<Race>(Race.values());
 	
 	JComboBox<Integer> STRBox 	= new JComboBox<Integer>(lvlPoss);
 	JComboBox<Integer> DEXBox 	= new JComboBox<Integer>(lvlPoss);
@@ -413,12 +448,7 @@ class WeaponRecord extends JPanel{
 	public JButton deleteButton 		= new JButton("X");
 	
 	public WeaponRecord() {
-		this  .setBackground(new Color(100,145,165));
-		Rectangle bond = this.getBounds();
-		this.add(DICENObox	 );	DICENObox	.setBounds(bond.x+  5,bond.y+ 5, 35, 20);
-		this.add(DICETYPEbox );	DICETYPEbox .setBounds(bond.x+ 45,bond.y+ 5, 40, 20);
-		this.add(DMGbox		 );	DMGbox		.setBounds(bond.x+100,bond.y+ 5, 60, 20);
-		this.add(deleteButton);	deleteButton.setBounds(bond.x+185,bond.y+ 5, 45, 20);
+		this(DamageType.BLUD,1,Die.D4);
 	}
 	
 	public WeaponRecord(DamageType dt, Integer dn, Die dit) {
@@ -428,16 +458,11 @@ class WeaponRecord extends JPanel{
 		this.add(DICETYPEbox );	DICETYPEbox .setBounds(bond.x+ 45,bond.y+ 5, 40, 20);
 		this.add(DMGbox		 );	DMGbox		.setBounds(bond.x+100,bond.y+ 5, 60, 20);
 		this.add(deleteButton);	deleteButton.setBounds(bond.x+185,bond.y+ 5, 45, 20);
-		this.DMGbox.setSelectedItem(dt);
-		this.DICENObox.setSelectedItem(dn);
-		this.DICETYPEbox .setSelectedItem(dit);
+		this.DMGbox		.setSelectedItem(dt);
+		this.DICENObox	.setSelectedItem(dn);
+		this.DICETYPEbox.setSelectedItem(dit);
 	}
 }
-/*
-WeaponRecord wrc = new WeaponRecord();
-this.panel.add(wrc);
-wrc.setBounds(340,500,280, 30);
-//*/
 
 class WeaponPanel extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -476,7 +501,9 @@ class WeaponPanel extends JPanel implements ActionListener{
 		if(records.size()>0) temp = records.get(records.size()-1).getBounds();
 		if(this.records.size()<8) this.addRecord.setBounds(20, temp.y+33, 240, 30);
 		else this.addRecord.setBounds(20, temp.y+30, 240, 0);
-		this.setBounds(bond.x,bond.y,bond.width,this.addRecord.getBounds().y+this.addRecord.getBounds().height+30-bond.y);
+		int height = this.addRecord.getBounds().y+this.addRecord.getBounds().height+75-bond.y;
+		this.setBounds(bond.x,bond.y,bond.width,height);
+		this.repaint();
 	}
 	
 	public void updateTheLook(WeaponRecord record) {
@@ -494,14 +521,11 @@ class WeaponPanel extends JPanel implements ActionListener{
 			if(this.records.size()<8) updateTheLook(new WeaponRecord());
 		}
 		else {
-			if(this.records.size()>1) {
-				for(int i = 0; i<records.size();i++) {
-					if(source == records.get(i).deleteButton) {
-						this.remove(records.get(i));
-						records.remove(i);
-						updateTheLook();
-					}
-				}
+			for(int i=0;i<records.size();i++)
+			if(source == records.get(i).deleteButton) {
+				this.remove(records.get(i));
+				records.remove(i);
+				updateTheLook();
 			}
 		}
 	}
