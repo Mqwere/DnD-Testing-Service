@@ -2,8 +2,7 @@ package Support;
 
 import java.util.ArrayList;
 
-
-public class TextEditor {
+public class Editor {
 
 	private static boolean DEFAULT_VALUE = true;
 	
@@ -91,4 +90,5 @@ public class TextEditor {
 		}
 		return output;
 	}
+
 }

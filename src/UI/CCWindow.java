@@ -26,8 +26,8 @@ import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
 import Support.DamagePackage;
+import Support.Editor;
 import Support.EntityRegister;
-import Support.TextEditor;
 
 public class CCWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 	
 	JComboBox<DNDClass>	
 				classBox = new JComboBox<>(DNDClass.values());
-	JButton		roll	 = new JButton	  (TextEditor.htmlize("Roll",2));
+	JButton		roll	 = new JButton	  (Editor.htmlize("Roll",2));
 	
 	Boolean		edit 	 = false;
 	
@@ -141,8 +141,8 @@ public class CCWindow extends DNDWindow implements ActionListener{
 				(Race)this.statPanel.raceBox.getSelectedItem(),
 				this.statPanel.nameField.getText(),
 				this.statPanel.lvlChoice.getItemAt(this.statPanel.lvlChoice.getSelectedIndex()),
-				TextEditor.tryParse(this.statPanel.hpField.getText()),
-				TextEditor.tryParse(this.statPanel.acField.getText()),
+				Editor.tryParse(this.statPanel.hpField.getText()),
+				Editor.tryParse(this.statPanel.acField.getText()),
 				this.statPanel.STRBox.getItemAt(this.statPanel.STRBox.getSelectedIndex()),
 				this.statPanel.DEXBox.getItemAt(this.statPanel.DEXBox.getSelectedIndex()),
 				this.statPanel.CONBox.getItemAt(this.statPanel.CONBox.getSelectedIndex()),

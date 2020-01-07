@@ -18,8 +18,8 @@ import Core.Program;
 import Enums.Core.Race;
 import Enums.Core.TeamColor;
 import Enums.UI.WindowState;
+import Support.Editor;
 import Support.EntityRegister;
-import Support.TextEditor;
 
 public class MainWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -32,11 +32,11 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	JButton exitButton	 = new JButton("Exit");
 	
 	/// ENCSET UI
-	TeamPanel blue_team  = new TeamPanel(TextEditor.htmlize("Blue team",5), TeamColor.BLUE);
-	TeamPanel red_team   = new TeamPanel(TextEditor.htmlize("Red  team",5), TeamColor.RED );
-	JButton   startButton= new JButton	(TextEditor.htmlize("Start Simulation",4));
-	JButton   saveButton = new JButton	(TextEditor.htmlize("Save\nSimulation",true, 4));
-	JButton	  backButton = new JButton	(TextEditor.htmlize("Back",4));
+	TeamPanel blue_team  = new TeamPanel(Editor.htmlize("Blue team",5), TeamColor.BLUE);
+	TeamPanel red_team   = new TeamPanel(Editor.htmlize("Red  team",5), TeamColor.RED );
+	JButton   startButton= new JButton	(Editor.htmlize("Start Simulation",4));
+	JButton   saveButton = new JButton	(Editor.htmlize("Save\nSimulation",true, 4));
+	JButton	  backButton = new JButton	(Editor.htmlize("Back",4));
 	
 	/// ENCINIT UI
 	
@@ -211,7 +211,7 @@ class TeamPanel extends JPanel implements ActionListener{
 	JLabel	title	  = new JLabel();
 	List<CharacterRecord> 
 			records   = new ArrayList<>();
-	JButton addRecord = new JButton(TextEditor.htmlize("+",6));
+	JButton addRecord = new JButton(Editor.htmlize("+",6));
 	
 	public TeamPanel(String title, TeamColor color) {
 		this.setBackground(new Color(180,180,180));
