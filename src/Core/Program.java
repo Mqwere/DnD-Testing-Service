@@ -15,10 +15,8 @@ import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
-import Support.DamagePackage;
 import Support.EntityRegister;
-import Support.Skill;
-import UI.ClassWindow;
+import UI.CCWindow;
 import UI.MainWindow;
 
 public class Program {
@@ -332,7 +330,7 @@ public class Program {
 	public static void main(String[] args) {
 		//Program.mainWindow = new MainWindow();
 		
-		new ClassWindow(10);
+		new CCWindow(null, TeamColor.BLUE, 0);
 		
 		//Program.print(Entity.customChara().toString());
 	}

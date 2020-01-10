@@ -1,8 +1,6 @@
 package Interfaces.Active;
 
 import Core.Entity;
-import Enums.Active.ResultOfResist;
-import Enums.Support.PropertyName;
 
 public interface Resistable {
 	//public Integer 			getDC();

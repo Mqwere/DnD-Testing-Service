@@ -11,5 +11,6 @@ public enum DNDClass {
 	RANGER	 ,
 	ROGUE	 ,
 	SORCERER ,
-	WARLOCK	 ;
+	WARLOCK	 ,
+	WIZARD	 ;
 }

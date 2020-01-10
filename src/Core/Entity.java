@@ -415,6 +415,15 @@ public class Entity{
 				// 15: Mystic Arcanum (8th level)
 				// 17: Mystic Arcanum (9th level)
 				// 20: Eldritch Master
+				break;
+			case WIZARD:
+				if(classMap.get(cl).isPrimary) {
+					this.props.get(PropertyName.WIS).setProfficient();
+					this.props.get(PropertyName.CHR).setProfficient();
+				}
+				//  1: Ritual Casting
+				// 18: Spell Mastery
+				// 20: Signature Spells
 				break;			
 			}
 		}

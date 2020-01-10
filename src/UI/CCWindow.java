@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.EnumMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,9 +26,11 @@ import Enums.Core.WeaponType;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
+import Support.DClass;
 import Support.DamagePackage;
 import Support.Editor;
 import Support.EntityRegister;
+import Support.Skill;
 
 public class CCWindow extends DNDWindow implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -50,6 +53,9 @@ public class CCWindow extends DNDWindow implements ActionListener{
 	TeamColor	ccolor;
 	Integer		cint;
 	
+	public EnumMap<DNDClass,DClass>
+	  classMap 	  = new EnumMap<>(DNDClass.class);
+	
 	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint) {
 		super(995, 580, false);
 		this.setTitle("DnD Character Creation");
@@ -70,6 +76,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.panel.add(classBox);
 		this.panel.add(roll);
 		
+		this.classMap= new EnumMap<>(DNDClass.class);
 		this.classBox.setSelectedItem(DNDClass.FIGHTER);
 		
 		classw.addActionListener(this);
@@ -207,7 +214,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		}
 		else
 		if(classw == source) {
-			
+			new ClassWindow(this,this.statPanel.lvlChoice.getItemAt(this.statPanel.lvlChoice.getSelectedIndex()));
 		}
 		else
 		if(skillw == source) {
@@ -215,7 +222,94 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		}
 		else
 		if(roll == source) {
-			
+			ArrayList<Integer> rolls = new ArrayList<>();
+			for(int i=0; i<6; i++) rolls.add(Skill.rollSkill());
+			rolls.sort((Integer x, Integer y)-> y.intValue()-x.intValue());
+			int i = 0;
+			switch((DNDClass)this.classBox.getSelectedItem()) {
+			case BARBARIAN:
+			case FIGHTER:
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				break;
+			case BARD:
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				break;
+			case CLERIC:
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				break;
+			case DRUID:
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				break;
+			case MONK:
+			case RANGER:
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				break;
+			case PALADIN:
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				break;
+			case ROGUE:
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				break;
+			case SORCERER:
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				break;
+			case WARLOCK:
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				break;
+			case WIZARD:
+				this.statPanel.INTBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.WISBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CHRBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.DEXBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.CONBox.setSelectedItem(rolls.get(i++));
+				this.statPanel.STRBox.setSelectedItem(rolls.get(i++));
+				break;
+			}
 		}
 	}
 }
@@ -297,8 +391,8 @@ class StatPanel extends JPanel implements ActionListener{
 		STRLabel .setBounds(dim.x+ 20,dim.y+210,100, 25);	STRBox 	 .setBounds(dim.x+120,dim.y+210,100, 25);
 		DEXLabel .setBounds(dim.x+ 20,dim.y+246,100, 25);	DEXBox 	 .setBounds(dim.x+120,dim.y+246,100, 25);
 		CONLabel .setBounds(dim.x+ 20,dim.y+282,100, 25);	CONBox 	 .setBounds(dim.x+120,dim.y+282,100, 25);
-		WISLabel .setBounds(dim.x+ 20,dim.y+318,100, 25);	INTBox 	 .setBounds(dim.x+120,dim.y+318,100, 25);
-		INTLabel .setBounds(dim.x+ 20,dim.y+354,100, 25);	WISBox 	 .setBounds(dim.x+120,dim.y+354,100, 25);
+		WISLabel .setBounds(dim.x+ 20,dim.y+318,100, 25);	WISBox 	 .setBounds(dim.x+120,dim.y+318,100, 25);
+		INTLabel .setBounds(dim.x+ 20,dim.y+354,100, 25);	INTBox 	 .setBounds(dim.x+120,dim.y+354,100, 25);
 		CHRLabel .setBounds(dim.x+ 20,dim.y+390,100, 25);	CHRBox	 .setBounds(dim.x+120,dim.y+390,100, 25);
 	}
 
