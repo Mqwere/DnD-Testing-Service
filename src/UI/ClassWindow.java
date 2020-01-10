@@ -24,6 +24,7 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 	JScrollPane 	pane;
 	JPanel			panel	  = new JPanel();
 	JButton			addRecord = new JButton("+");
+	JButton			save 	  = new JButton("SAVE");
 	
 	public ClassWindow(int clevel) {
 		super(400, 540, true);
@@ -31,7 +32,8 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 		this.clevel = clevel;
 		
 		panel.setLayout(null);
-		this.panel.add(addRecord); addRecord.addActionListener(this);
+		this.panel.add(addRecord); 	addRecord.addActionListener(this);
+		this.panel.add(save); 		save	 .addActionListener(this);
 		initializeArr();
 		pane = new JScrollPane(panel);
 		this.setContentPane(pane);
@@ -39,19 +41,22 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 		this.setComponents();
 	}
 	
-	public void initializeArr() {
-		for(DNDClass cl: DNDClass.values())	clarr.add(cl);
-	}
+	public void initializeArr() {for(DNDClass cl: DNDClass.values())	clarr.add(cl);}
 	
 	public void setComponents() {
 		Rectangle temp = this.getBounds();
-			int tempy = temp.y/10;
+			int tempy = temp.height*1/20;
 		for(int i=0; i<records.size(); i++) {
-			tempy = temp.y/10 + ((i*3*temp.y)/10);
-			records.get(i).setBounds(temp.x/10,tempy,temp.x/3,temp.y/5);
-			tempy += ((3*temp.y)/10);
+			tempy = temp.height*1/20 + ((i*5*temp.height)/32);
+			records.get(i).setBounds(temp.width/15,tempy,temp.width*8/10,temp.height/8);
 		}
-		addRecord.setBounds(temp.x/10,tempy,temp.x/3,temp.y/5);
+		tempy = temp.height*1/20 + ((records.size()*5*temp.height)/32);
+		if(records.size()<4) 
+			addRecord.setBounds(temp.width/15,tempy,temp.width*8/10,temp.height/8);
+		else
+			addRecord.setBounds(temp.width/15,tempy,temp.width*8/10,0);
+		
+		save.setBounds(temp.width/15,temp.height*1/20 + (20*temp.height)/32,temp.width*8/10,temp.height/8);
 	}
 	
 	public void setComponents(ClassRecord cr) {
@@ -76,11 +81,11 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 		}
 		else {
 			for(ClassRecord cr: records) {
-				if(cr.classBox==source) {
+				if(cr.classBox	== source) {
 					
 				}
 				else
-				if(cr.lvlBox==source) {
+				if(cr.lvlBox	== source) {
 					
 				}
 			}
@@ -96,14 +101,16 @@ class ClassRecord extends JPanel{
 	
 	public JComboBox<DNDClass> classBox;
 	public JComboBox<Integer>  lvlBox  ;
+	public JButton			   delete  = new JButton("X");
 	
 	public ClassRecord(ClassWindow master, int remLvL) {
-		this.setBackground(new Color(180,180,180));
+		this.setBackground(new Color(100,180,180));
 		this.setLayout(null);
 		this.classBox = new JComboBox<DNDClass>(ALtoArr(master.clarr));
 		this.setBoxSize(remLvL);
 		this.add(classBox);
 		this.add(lvlBox);
+		this.add(delete);
 		this.master = master;
 	}
 	
@@ -126,7 +133,8 @@ class ClassRecord extends JPanel{
 	@Override
 	public void setBounds(int x, int y, int width, int height) {
 		super.setBounds(x, y, width, height);
-		this.classBox.setBounds(width/10,height/10,(width*3)/10,(height*8)/10);
-		this.lvlBox.setBounds((width*6)/10,height/10,(width*3)/10,(height*8)/10);
+		this.classBox	.setBounds(	 width/20,		height/10,(width*4)/10,	(height*8)/10);
+		this.lvlBox		.setBounds(	(width*5)/10,	height/10,(width*2)/10,	(height*8)/10);
+		this.delete		.setBounds( (width*75)/100,	height/10,(height*8)/10,(height*8)/10);
 	}
 }
