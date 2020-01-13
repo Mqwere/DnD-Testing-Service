@@ -8,6 +8,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import Core.Entity;
+import Core.Program;
 import Enums.Core.TeamColor;
 
 public class EntityRegister{
@@ -67,6 +68,4 @@ public class EntityRegister{
 	public static HashMap<Integer,Entity> getMap(TeamColor color) {
 		return EntityRegister.entityMap.get(color);
 	}
-	
-
 }

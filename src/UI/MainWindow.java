@@ -80,9 +80,9 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	    		blue_team	.clear();
 	    		red_team	.clear(); 
 	    		newButton	.setVisible(false);
-	    		saveButton	.setVisible(true);
 	    		loadButton	.setVisible(false);
 	    		exitButton	.setVisible(false);
+	    		saveButton	.setVisible(true);
 	    		blue_team	.setVisible(true );
 	    		red_team 	.setVisible(true );
 	    		backButton 	.setVisible(true );
@@ -108,7 +108,7 @@ public class MainWindow extends DNDWindow implements ActionListener{
 	    			break;
 		}
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
@@ -123,10 +123,9 @@ public class MainWindow extends DNDWindow implements ActionListener{
 		}
 		else
 		if(source == loadButton){
-			ArrayList<Byte> input = FileControler.fileToByteArray(this);
+			String input = FileControler.fileToByteArray(this);
 			if(input!=null) {
-				Program.setCurrentStatus(input);
-				try{Program.saveToEntityList();} catch(Exception e) {Program.log("MainWindow.actionPerformed.loadButton: "+e.getMessage());}
+				try{Program.saveToEntityList(input);} catch(Exception e) {Program.log("MainWindow.actionPerformed.loadButton: "+e.getMessage());}
 				this.setState(WindowState.ENCSET);
 				for(TeamColor tm: TeamColor.values()) {
 					HashMap<Integer, Entity> temp = EntityRegister.getMap(tm);
@@ -248,7 +247,7 @@ class TeamPanel extends JPanel implements ActionListener{
 		this.addRecord	.setBounds(tempX/2, tempY*2, tempX*9, (tempY*3)/2);
 	}
 	
-	private void updateTheLook() {
+	public void updateTheLook() {
 		Rectangle bond = this.getBounds();
 		int tempX = bond.width/10, tempY = bond.height/18;
 		this.sortRecords();

@@ -1,0 +1,100 @@
+package UI;
+
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class SkillsWindow extends DNDWindow implements ActionListener{
+	private static final long serialVersionUID = 1L;
+	
+	// Core
+	CCWindow master;
+	ArrayList<SkillRecord> 
+			records = new ArrayList<>();
+	
+	// Global
+	JButton	addRecord = new JButton("+");
+	JButton	save	  = new JButton("Save");
+
+	public SkillsWindow(CCWindow master) {
+		super(400,720,false);
+		this.master = master; this.setTitle((this.master!=null ? master.statPanel.nameField.getText()+" - Skills":"SkillWindow"));
+		this.add(addRecord); addRecord.addActionListener(this);
+		this.add(save);		 save	  .addActionListener(this);
+		setComponents();
+	}
+	
+	public void setComponents() {
+		Rectangle temp = this.panel.getBounds();
+			int tempy;
+		for(int i=0; i<records.size(); i++) {
+			tempy = temp.height*1/40 + ((i*5*temp.height)/48);
+			records.get(i).setBounds(temp.width/16,tempy,temp.width*7/8,temp.height*1/12);
+		}
+		tempy = temp.height*1/40 + ((records.size()*5*temp.height)/48);
+		if(records.size()>=8) 
+			addRecord.setBounds(temp.width/16,tempy,temp.width*7/8,0);
+		else
+			addRecord.setBounds(temp.width/16,tempy,temp.width*7/8,temp.height*1/12);
+		
+		save.setBounds(temp.width/16,temp.height/40 + (40*temp.height)/48,temp.width*7/8,temp.height/12);
+	}
+	
+	public void setComponents(SkillRecord cr) {
+		this.records.add(cr);
+		this.panel.add(cr);
+		cr.delete	.addActionListener(this);
+		cr.edit		.addActionListener(this);
+		this.setComponents();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		Object source = event.getSource();
+		if(source == addRecord) setComponents(new SkillRecord());
+		else {
+			if(this.records.size()>0) {
+				for(int i = 0; i<records.size();i++) {
+					if(source == records.get(i).delete) {
+						this.remove(records.get(i));;
+						this.records.remove(i);
+						setComponents();
+					}
+					else 
+					if(source == records.get(i).edit) {
+						//this.remove(records.get(i));
+						//this.records.remove(i);
+					}
+				}
+			}
+		}
+	}
+}
+
+class SkillRecord extends JPanel{
+	private static final long serialVersionUID = 1L;
+	
+	public JLabel	name	= new JLabel("Name");
+	public JButton	delete  = new JButton("X");
+	public JButton	edit	= new JButton("...");
+	
+	public SkillRecord() {
+		this.add(name);
+		this.add(delete);
+		this.add(edit);
+	}
+	
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		super.setBounds(x, y, width, height);
+		this.name       .setBounds(	(width*1)/10,	height/10,	(width*2)/10,	(height*8)/10);
+		this.edit		.setBounds(	(width*7)/10,	height/10,	(height*8)/10,	(height*8)/10);
+		this.delete		.setBounds( (width*85)/100,	height/10,	(height*8)/10,	(height*8)/10);
+	}
+	
+}

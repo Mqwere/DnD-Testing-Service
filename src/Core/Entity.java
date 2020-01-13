@@ -56,7 +56,7 @@ public class Entity{
 	EnumMap<DamageType,ImmunityType>
 			  resistanceMap = new EnumMap<>(DamageType.class);
 	
-	EnumMap<DNDClass,DClass>
+	public EnumMap<DNDClass,DClass>
 			  classMap 	  = new EnumMap<>(DNDClass.class);
 	
 	public Entity() {
@@ -76,13 +76,8 @@ public class Entity{
 		defaultizeResistances();
 	}
 	
-
-	
 	public static Entity customChara() {
 		Entity ent = new Entity(Race.CUSTOM, "Dave", 10, 100, 10, 14, 10, 16, 4, 4 ,4);
-		ent.setClass(DNDClass.FIGHTER,new DClass(6,true));
-		ent.setClass(DNDClass.BARBARIAN,3);
-		ent.setClass(DNDClass.MONK,1);
 		ArrayList<DamagePackage> dmgPck = new ArrayList<DamagePackage>();
 		dmgPck.add(new DamagePackage(2,Die.D4,DamageType.SLAS));
 		dmgPck.add(new DamagePackage(1,Die.D4,DamageType.FIRE));
@@ -93,8 +88,13 @@ public class Entity{
 		wep.setEnhancement(Enhancement.plus3);
 		wep.setDmType(DamageType.SLAS);
 		
-		ent.setWeapon(wep);
-		ent.realizeTheClasses();
+
+		ent	.setClass(DNDClass.FIGHTER,new DClass(6,true))
+			.setClass(DNDClass.BARBARIAN,3)
+			.setClass(DNDClass.MONK,1)
+			.setColor(TeamColor.BLUE)
+			.setWeapon(wep)
+			.realizeTheClasses();
 		return ent;
 	}
 	
@@ -107,21 +107,30 @@ public class Entity{
 		this.setprops(armorClass, STR, DEX, CON, INT, WIS, CHR);
 	}
 	
-	public void addEffect(int index, Effect effect) {
+	public Entity addEffect(int index, Effect effect) {
 		this.effectQueue.get(index).add(effect);
+		return this;
 	}
 	
-	public void setClass(DNDClass cl, Integer in) {
+	public Entity setClass(DNDClass cl, Integer in) {
 		if(in==0) 	this.classMap.remove(cl );
 		else 		this.classMap.put(cl, new DClass(in));
+		return this;
 	}
 	
-	public void setClass(DNDClass cl, DClass dclass) {
+	public Entity setClass(DNDClass cl, DClass dclass) {
 		this.classMap.put(cl, dclass);
+		return this;
 	}
 	
-	public void setName(String name) {
+	public Entity setName(String name) {
 		this.name = name;
+		return this;
+	}
+	
+	public Entity setColor(TeamColor color) {
+		this.color = color;
+		return this;
 	}
 	
 	public String getName() {
@@ -140,39 +149,44 @@ public class Entity{
 		return this.maxHP;
 	}
 	
-	public void setHP(int hp) {
+	public Entity setHP(int hp) {
 		this.maxHP = hp;
+		return this;
 	}
 	
 	public Integer getAC() {
 		return this.props.get(PropertyName.AC) .value;
 	}
 	
-	public void setAC(Integer AC) {
+	public Entity setAC(Integer AC) {
 		this.props.get(PropertyName.AC) .setValue(AC);
+		return this;
 	}
 	
-	public void setprops(int STR, int DEX, int CON, int INT, int WIS, int CHR) {
+	public Entity setprops(int STR, int DEX, int CON, int INT, int WIS, int CHR) {
+		this.props.get(PropertyName.STR).setValue(STR);
+		this.props.get(PropertyName.DEX).setValue(DEX);
+		this.props.get(PropertyName.CON).setValue(CON);
+		this.props.get(PropertyName.INT).setValue(INT);
+		this.props.get(PropertyName.WIS).setValue(WIS);
+		this.props.get(PropertyName.CHR).setValue(CHR);
+		return this;	
+	}
+	
+	public Entity setprops(int AC, int STR, int DEX, int CON, int INT, int WIS, int CHR) {
+		this.props.get(PropertyName.AC) .setValue(AC);
 		this.props.get(PropertyName.STR).setValue(STR);
 		this.props.get(PropertyName.DEX).setValue(DEX);
 		this.props.get(PropertyName.CON).setValue(CON);
 		this.props.get(PropertyName.INT).setValue(INT);
 		this.props.get(PropertyName.WIS).setValue(WIS);
 		this.props.get(PropertyName.CHR).setValue(CHR);	
+		return this;
 	}
 	
-	public void setprops(int AC, int STR, int DEX, int CON, int INT, int WIS, int CHR) {
-		this.props.get(PropertyName.AC) .setValue(AC);
-		this.props.get(PropertyName.STR).setValue(STR);
-		this.props.get(PropertyName.DEX).setValue(DEX);
-		this.props.get(PropertyName.CON).setValue(CON);
-		this.props.get(PropertyName.INT).setValue(INT);
-		this.props.get(PropertyName.WIS).setValue(WIS);
-		this.props.get(PropertyName.CHR).setValue(CHR);	
-	}
-	
-	public void setWeapon(Weapon weapon) {
+	public Entity setWeapon(Weapon weapon) {
 		this.weapon = weapon;
+		return this;
 	}
 	
 	public Weapon getWeapon() {
@@ -185,11 +199,12 @@ public class Entity{
 		}
 	}
 	
-	public void setResistance(DamageType dt, ImmunityType it) {
+	public Entity setResistance(DamageType dt, ImmunityType it) {
 		if(dt == null) Program.log("SET RESISTANCE ERROR: DT NULL");
 		if(it == null) Program.log("SET RESISTANCE ERROR: IT NULL");
 		
 		this.resistanceMap.put(dt, it);
+		return this;
 	}
 	
 	public int getProficiency() {
@@ -200,7 +215,7 @@ public class Entity{
 		return this.resistanceMap.get(dt);
 	}
 	
-	public void setSkillV(PropertyName name, Integer value) {this.props.get(name).setValue(value);}
+	public Entity setSkillV(PropertyName name, Integer value) {this.props.get(name).setValue(value); return this;}
 	
 	public Integer getSkillV(PropertyName name) {return this.props.get(name).value;}
 	

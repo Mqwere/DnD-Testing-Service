@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Core.Entity;
+import Core.Program;
 import Core.Weapon;
 import Enums.Core.DNDClass;
 import Enums.Core.Enhancement;
@@ -56,14 +57,21 @@ public class CCWindow extends DNDWindow implements ActionListener{
 	public EnumMap<DNDClass,DClass>
 	  classMap 	  = new EnumMap<>(DNDClass.class);
 	
-	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint) {
+	public void close() {
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+	}
+	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint) {this(parent, ccolor, cint, false);}
+	
+	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint,boolean edit) {
 		super(995, 580, false);
+		this.edit = edit;
 		this.setTitle("DnD Character Creation");
 		this.parent = parent;
 		this.ccolor = ccolor;
 		this.cint	= cint;
 		panel  .setBackground(new Color(50, 93, 110));
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		this.panel.add(statPanel);
 		this.panel.add(resPanel );
@@ -71,10 +79,10 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.panel.add(affirm	);
 		this.panel.add(cancel	);
 
-		this.panel.add(classw);
-		this.panel.add(skillw);
-		this.panel.add(classBox);
-		this.panel.add(roll);
+		this.panel.add(classw	);
+		this.panel.add(skillw	);
+		this.panel.add(classBox	);
+		this.panel.add(roll		);
 		
 		this.classMap= new EnumMap<>(DNDClass.class);
 		this.classBox.setSelectedItem(DNDClass.FIGHTER);
@@ -89,8 +97,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 	}
 	
 	public CCWindow(MainWindow parent, TeamColor ccolor, Integer cint, Entity ent) {
-		this(parent,ccolor,cint);
-		this.edit = true;
+		this(parent,ccolor,cint,true);
 		/// ===================
 		this.statPanel.acField	.setText(Integer.toString(ent.getLvL()));
 		this.statPanel.nameField.setText(ent.getName());
@@ -124,20 +131,28 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.wepPanel.enhancBox	.setSelectedItem(tmp.getEnhancement());
 		this.wepPanel.wtBox		.setSelectedItem(tmp.getWpType());
 		for(DamagePackage dp: tmp.damage)
-			this.wepPanel.updateTheLook(new WeaponRecord(dp.dmgType,dp.dieNo,dp.dieSize));
+			this.wepPanel.updateTheLook(new WeaponRecord(dp.dmgType, dp.dieNo, dp.dieSize));
+		/// ===================
+		this.classMap = ent.classMap;
 	}
 	
 	private void setContent() {
 		statPanel.setBounds( 20, 60,300,440);
 		resPanel .setBounds(340, 60,300,440);
 		wepPanel .setBounds(660, 60,300,180);
-		affirm	 .setBounds(680,470,110, 30);
-		cancel	 .setBounds(810,470,110, 30);
-
 		classBox .setBounds( 20, 15,240, 30);
 		roll	 .setBounds(270, 15, 50, 30);
 		classw	 .setBounds(340, 15,300, 30);
 		skillw	 .setBounds(660, 15,300, 30);
+		
+		if(this.edit) {
+			affirm.setBounds(680,470,240, 30);
+			cancel.setBounds(920,470,  0, 30);
+		}
+		else {
+			affirm.setBounds(680,470,110, 30);
+			cancel.setBounds(810,470,110, 30);
+		}
 	}
 
 	@Override
@@ -189,28 +204,19 @@ public class CCWindow extends DNDWindow implements ActionListener{
 			
 			putout.setEnhancement(this.wepPanel.enhancBox.getItemAt(this.wepPanel.enhancBox.getSelectedIndex()));
 			putout.setProfficient(this.wepPanel.profBox.isSelected());
+			output.classMap = this.classMap;
 			output.setWeapon(putout);
-			
-			//if(!this.edit)	{
+	
 			EntityRegister.put(this.ccolor, output);
 			if(this.ccolor == TeamColor.BLUE) 
 				 this.parent.blue_team	.updateTheLook(new CharacterRecord(output));
 			else this.parent.red_team	.updateTheLook(new CharacterRecord(output));
-				
-			//}
-			/*else {
-				if(this.ccolor == TeamColor.BLUE) 
-					 this.parent.blue_team	.updateTheLook(cint,output);
-				else this.parent.red_team	.updateTheLook(cint,output);
-				
-				EntityRegister.put(this.ccolor, cint, output);
-			}	*/
 			
-			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			this.close();
 		}
 		else
 		if(cancel == source) {
-			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			this.close();
 		}
 		else
 		if(classw == source) {

@@ -1,6 +1,5 @@
 package Core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -16,14 +15,22 @@ import Enums.Support.DamageType;
 import Enums.Support.Die;
 import Enums.Support.PropertyName;
 import Support.EntityRegister;
-import UI.CCWindow;
 import UI.MainWindow;
+import UI.SkillsWindow;
 
 public class Program {
 	
 	public static MainWindow mainWindow;
 
 	public static String save = new String();
+
+	public static void main(String[] args) {
+		//Program.mainWindow = new MainWindow();
+		
+		//Entity ent = Entity.customChara(); FileControler.persistentSave((ent.toString()+"\n=").getBytes());
+
+		new SkillsWindow(null);
+	}
 	
 	public static void error(Object message) {
 		String output = new String();
@@ -60,6 +67,10 @@ public class Program {
 
 	public static void log(Object message) {
 		Program.print("\n "+message);
+	}
+	public static void saveToEntityList(String save) {
+		Program.save = save;
+		Program.saveToEntityList();
 	}
 	
 	public static void saveToEntityList() {
@@ -231,12 +242,6 @@ public class Program {
 							}
 							break;							
 						default:
-							String[] subline = line.split(" ");
-							if(subline.length>1)
-							for(DNDClass cl: DNDClass.values()) {
-								if(subline[0].equals(cl.toString())) tempE.setClass(cl, Integer.parseInt(subline[1]));
-								if(subline.length>2) tempE.classMap.get(cl).isPrimary = true;
-							}
 							break;
 						}
 						break;
@@ -282,11 +287,17 @@ public class Program {
 						break;
 					case CLOPEN:
 						String[] subline = line.split(" ");
-						for(DNDClass dc: DNDClass.values())
-							if (subline[0].equals(dc.toString()))
+						for(DNDClass dc: DNDClass.values()) {
+							if (subline[0].equals(dc.toString())) {
 								tempE.setClass(dc, Integer.parseInt(subline[1]));
+								if(subline.length>2) {
+									tempE.classMap.get(dc).isPrimary = true;
+								}
+							}
+						}
 						break;
 					default:
+						Program.error("???");
 						break;
 					}
 				}
@@ -300,15 +311,9 @@ public class Program {
 		}
 	}
 	
-	/*
-	 * 	plus0(0),
-		plus1(1),
-		plus2(2),
-		plus3(3)
-	;
-	 */
-	
+
 	public static String getSaveFile() {
+		save ="";
 		for(TeamColor tm: TeamColor.values()) {
 			HashMap<Integer, Entity> temp = EntityRegister.getMap(tm);
 			if(temp!=null)
@@ -318,21 +323,6 @@ public class Program {
 		}
 		save +="\n=";
 		return save;
-	}
-	
-	public static void setCurrentStatus(ArrayList<Byte> array) {
-		String boop = new String();
-		for(Byte b: array)
-			boop += (char)Byte.toUnsignedInt(b);
-		Program.save = boop;
-	}
-
-	public static void main(String[] args) {
-		//Program.mainWindow = new MainWindow();
-		
-		new CCWindow(null, TeamColor.BLUE, 0);
-		
-		//Program.print(Entity.customChara().toString());
 	}
 
 }

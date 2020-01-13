@@ -30,10 +30,9 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 	JButton			save 	  = new JButton("SAVE");
 	
 	public ClassWindow(CCWindow master, int clevel) {
-		super(400, 540, true);
+		super(400, 540, false);
 		this.master = master;
-		if(master!=null) this.setTitle(master.statPanel.nameField.getText()+" - Class");
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		if(master!=null) this.setTitle((this.master!=null ? master.statPanel.nameField.getText()+" - Class":"ClassWindow"));
 		this.panel.setBackground(new Color(0, 43, 60));
 		this.maxclevel 	= clevel;
 		this.clevel 	= clevel;
@@ -55,7 +54,7 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 			for(DNDClass dc: this.master.classMap.keySet()) {
 				this.setComponents(new ClassRecord(this,this.clevel,dc,this.master.classMap.get(dc).level,this.clarr,this.master.classMap.get(dc).isPrimary));
 			}
-			//this.refreshRecords();
+			this.refreshRecords();
 		}
 	}
 	
@@ -158,9 +157,8 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 		if(source==save) {
 			EnumMap<DNDClass,DClass> tempClass = new EnumMap<DNDClass,DClass>(DNDClass.class);
 			
-			for(ClassRecord cr : this.records) {
+			for(ClassRecord cr : this.records)
 				tempClass.put((DNDClass)cr.classBox.getSelectedItem(), new DClass((Integer)cr.lvlBox.getSelectedItem(),cr.primary));
-			}
 			
 			if(master!=null) this.master.classMap = tempClass;
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
