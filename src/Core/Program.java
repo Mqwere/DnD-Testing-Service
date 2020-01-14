@@ -32,6 +32,14 @@ public class Program {
 		new SkillsWindow(null);
 	}
 	
+	public static void sleep(long milis) {
+		try {
+			Thread.sleep(milis);
+		} catch (InterruptedException e) {
+			Program.log(e);
+		}
+	}
+	
 	public static void error(Object message) {
 		String output = new String();
 		if(message.getClass() == String.class) {
