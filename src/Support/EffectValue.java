@@ -1,6 +1,6 @@
-package Enums.Support;
+package Support;
 
-import Support.Roller;
+import Enums.Support.Die;
 
 public class EffectValue{
 	Die valueDie = null;

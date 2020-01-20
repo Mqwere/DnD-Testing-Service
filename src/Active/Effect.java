@@ -4,8 +4,8 @@ import Core.Entity;
 import Enums.Core.EffectEffect;
 import Enums.Support.DamageType;
 import Enums.Support.Die;
-import Enums.Support.EffectValue;
 import Enums.Support.PropertyName;
+import Support.EffectValue;
 
 public class Effect {
 	Entity 			performer;
