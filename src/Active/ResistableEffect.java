@@ -39,7 +39,7 @@ public class ResistableEffect extends Effect implements Resistable{
 				case HalfEffect:
 					this.goHalf(target);
 					break;
-				case Nothing:
+				case NoEffect:
 					break;
 			}
 		}

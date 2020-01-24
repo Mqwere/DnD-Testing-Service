@@ -1,5 +1,6 @@
 package Core;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -23,13 +24,19 @@ public class Program {
 	public static MainWindow mainWindow;
 
 	public static String save = new String();
+	
+	public static final Color COLOR_DARK = new Color(  0, 43, 60);
+	
+	public static final Color COLOR_LGHT = new Color( 60,103,120);
 
 	public static void main(String[] args) {
 		//Program.mainWindow = new MainWindow();
 		
 		//Entity ent = Entity.customChara(); FileControler.persistentSave((ent.toString()+"\n=").getBytes());
 
-		new SkillsWindow(null);
+		//new SkillsWindow(null);
+		
+		SkillsWindow.test();
 	}
 	
 	public static void sleep(long milis) {

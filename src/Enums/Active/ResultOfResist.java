@@ -1,7 +1,7 @@
 package Enums.Active;
 
 public enum ResultOfResist {
-	Nothing,
+	NoEffect,
 	HalfEffect,
 	DeleteEffect
 }

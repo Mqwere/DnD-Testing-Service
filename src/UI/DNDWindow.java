@@ -5,6 +5,8 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Core.Program;
+
 public abstract class DNDWindow extends JFrame{
 
 	private static final long serialVersionUID = 1L;
@@ -16,7 +18,7 @@ public abstract class DNDWindow extends JFrame{
 		setSize(400, 400);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		panel.setBackground(new Color(0, 43, 60));
+		panel.setBackground(Program.COLOR_DARK);
 		panel.setLayout(null);
 		setContentPane(panel);
 		setVisible(true);

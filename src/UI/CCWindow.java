@@ -70,7 +70,7 @@ public class CCWindow extends DNDWindow implements ActionListener{
 		this.parent = parent;
 		this.ccolor = ccolor;
 		this.cint	= cint;
-		panel  .setBackground(new Color(50, 93, 110));
+		panel  .setBackground(Program.COLOR_LGHT);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		this.panel.add(statPanel);

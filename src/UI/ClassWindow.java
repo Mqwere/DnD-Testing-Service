@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import Core.Program;
 import Enums.Core.DNDClass;
 import Support.DClass;
 
@@ -33,7 +34,7 @@ public class ClassWindow extends DNDWindow implements ActionListener{
 		super(400, 540, false);
 		this.master = master;
 		if(master!=null) this.setTitle((this.master!=null ? master.statPanel.nameField.getText()+" - Class":"ClassWindow"));
-		this.panel.setBackground(new Color(0, 43, 60));
+		this.panel.setBackground(Program.COLOR_DARK);
 		this.maxclevel 	= clevel;
 		this.clevel 	= clevel;
 		
